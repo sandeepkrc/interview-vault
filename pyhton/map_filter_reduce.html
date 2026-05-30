@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐍 map() • filter() • reduce() | Python Higher-Order Functions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+            background: linear-gradient(135deg, #0b0b1a 0%, #1a1a3e 50%, #0f0f23 100%);
+            color: #e8e8e8;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 40px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #f9d423, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #aaaaff;
+            letter-spacing: 1px;
+        }
+
+        .badge-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.1);
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .badge-map { border-left: 3px solid #4ecdc4; }
+        .badge-filter { border-left: 3px solid #ff6b6b; }
+        .badge-reduce { border-left: 3px solid #f9d423; }
+
+        .theory-link-button {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: rgba(59, 130, 246, 0.9);
+            color: #fff;
+            padding: 0.55rem 0.9rem;
+            font-size: 0.95rem;
+            border-radius: 999px;
+            font-weight: 700;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.2s, background 0.2s;
+            z-index: 2;
+        }
+        .theory-link-button:hover {
+            transform: translateY(-2px);
+            background: #2563eb;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(20, 20, 40, 0.8);
+            backdrop-filter: blur(5px);
+            border-radius: 28px;
+            padding: 30px;
+            margin-bottom: 35px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .icon {
+            font-size: 3rem;
+        }
+
+        .card-title {
+            font-size: 2.2rem;
+            font-weight: bold;
+        }
+
+        .card-title-map { color: #4ecdc4; }
+        .card-title-filter { color: #ff6b6b; }
+        .card-title-reduce { color: #f9d423; }
+
+        .definition {
+            background: rgba(78, 205, 196, 0.1);
+            padding: 12px 20px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .definition-filter {
+            border-left-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .definition-reduce {
+            border-left-color: #f9d423;
+            background: rgba(249, 212, 35, 0.1);
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: #0a0a18;
+            border-radius: 20px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            border: 1px solid #2a2a4a;
+        }
+
+        pre {
+            margin: 0;
+            color: #e0e0e0;
+        }
+
+        .keyword { color: #ff6b6b; }
+        .function { color: #4ecdc4; }
+        .string { color: #f9d423; }
+        .number { color: #ff9f4a; }
+        .comment { color: #6a6a8a; }
+
+        .output {
+            background: #0a0a18;
+            border-radius: 16px;
+            padding: 15px 20px;
+            margin-top: 15px;
+            color: #aaffdd;
+            border-left: 3px solid #4ecdc4;
+            font-family: monospace;
+        }
+
+        .output-filter { border-left-color: #ff6b6b; }
+        .output-reduce { border-left-color: #f9d423; }
+
+        /* Comparison Section */
+        .comparison {
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1f);
+            border-radius: 28px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .comparison h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #ffd966;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #2a2a4a;
+        }
+
+        th {
+            background: rgba(255,255,255,0.05);
+            color: #ffd966;
+            font-size: 1.1rem;
+        }
+
+        td {
+            color: #ccc;
+        }
+
+        .highlight {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        hr {
+            border-color: #2a2a4a;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 700px) {
+            h1 { font-size: 2rem; }
+            .card-title { font-size: 1.5rem; }
+            .code-block { font-size: 11px; padding: 12px; }
+            .card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <a class="theory-link-button" href="map_filter_reduce_theory.html">Concept Details</a>
+            <h1>map() • filter() • reduce()</h1>
+            <div class="tagline">✨ Python's Most Powerful Higher-Order Functions ✨</div>
+            <div class="badge-container">
+                <span class="badge badge-map">📦 map() → Transform</span>
+                <span class="badge badge-filter">🔍 filter() → Select</span>
+                <span class="badge badge-reduce">➕ reduce() → Combine</span>
+            </div>
+        </div>
+
+
+        <!-- ============ MAP FUNCTION ============ -->
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">📦</span>
+                <span class="card-title card-title-map">map()</span>
+            </div>
+            <div class="definition">
+                <strong>💡 What it does:</strong> Applies a function to EVERY item in an iterable and returns a new iterable.
+            </div>
+
+            <div class="code-block">
+                <pre>
+<span class="comment"># Syntax</span>
+<span class="keyword">map</span>(function, iterable)
+
+<span class="comment"># Example 1: Double every number</span>
+numbers = [1, 2, 3, 4, 5]
+doubled = <span class="function">list</span>(<span class="keyword">map</span>(<span class="keyword">lambda</span> x: x * 2, numbers))
+print(doubled)
+
+<span class="comment"># Example 2: Convert strings to uppercase</span>
+names = ["alice", "bob", "charlie"]
+upper_names = <span class="function">list</span>(<span class="keyword">map</span>(str.upper, names))
+print(upper_names)
+
+<span class="comment"># Example 3: Square numbers</span>
+nums = [2, 4, 6, 8]
+squares = <span class="function">list</span>(<span class="keyword">map</span>(<span class="keyword">lambda</span> x: x ** 2, nums))
+print(squares)
+                </pre>
+            </div>
+            <div class="output">
+                📤 [2, 4, 6, 8, 10]<br>
+                📤 ['ALICE', 'BOB', 'CHARLIE']<br>
+                📤 [4, 16, 36, 64]
+            </div>
+        </div>
+
+        <!-- ============ FILTER FUNCTION ============ -->
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">🔍</span>
+                <span class="card-title card-title-filter">filter()</span>
+            </div>
+            <div class="definition definition-filter">
+                <strong>💡 What it does:</strong> Keeps ONLY items that pass a condition (returns True) and filters out the rest.
+            </div>
+
+            <div class="code-block">
+                <pre>
+<span class="comment"># Syntax</span>
+<span class="keyword">filter</span>(function, iterable)
+
+<span class="comment"># Example 1: Keep only even numbers</span>
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+evens = <span class="function">list</span>(<span class="keyword">filter</span>(<span class="keyword">lambda</span> x: x % 2 == 0, numbers))
+print(evens)
+
+<span class="comment"># Example 2: Keep names longer than 4 letters</span>
+names = ["Leo", "Emma", "Alexander", "Amy", "Benjamin"]
+long_names = <span class="function">list</span>(<span class="keyword">filter</span>(<span class="keyword">lambda</span> name: len(name) > 4, names))
+print(long_names)
+
+<span class="comment"># Example 3: Keep positive numbers</span>
+nums = [-5, 3, -1, 7, 0, -2, 4]
+positives = <span class="function">list</span>(<span class="keyword">filter</span>(<span class="keyword">lambda</span> x: x > 0, nums))
+print(positives)
+                </pre>
+            </div>
+            <div class="output output-filter">
+                📤 [2, 4, 6, 8, 10]<br>
+                📤 ['Alexander', 'Benjamin']<br>
+                📤 [3, 7, 4]
+            </div>
+        </div>
+
+        <!-- ============ REDUCE FUNCTION ============ -->
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">➕</span>
+                <span class="card-title card-title-reduce">reduce()</span>
+            </div>
+            <div class="definition definition-reduce">
+                <strong>💡 What it does:</strong> Applies a function cumulatively to reduce an iterable to a SINGLE value.<br>
+                <strong>⚠️ Note:</strong> Must import from functools: <code>from functools import reduce</code>
+            </div>
+
+            <div class="code-block">
+                <pre>
+<span class="comment"># Syntax</span>
+<span class="keyword">from</span> functools <span class="keyword">import</span> reduce
+<span class="function">reduce</span>(function, iterable)
+
+<span class="comment"># Example 1: Sum all numbers</span>
+numbers = [1, 2, 3, 4, 5]
+total = <span class="function">reduce</span>(<span class="keyword">lambda</span> a, b: a + b, numbers)
+print(f"Sum: {total}")
+
+<span class="comment"># Example 2: Find maximum value</span>
+nums = [42, 7, 99, 23, 56]
+max_num = <span class="function">reduce</span>(<span class="keyword">lambda</span> a, b: a <span class="keyword">if</span> a > b <span class="keyword">else</span> b, nums)
+print(f"Max: {max_num}")
+
+<span class="comment"># Example 3: Multiply all numbers (product)</span>
+values = [2, 3, 4]
+product = <span class="function">reduce</span>(<span class="keyword">lambda</span> a, b: a * b, values)
+print(f"Product: {product}")
+                </pre>
+            </div>
+            <div class="output output-reduce">
+                📤 Sum: 15<br>
+                📤 Max: 99<br>
+                📤 Product: 24
+            </div>
+        </div>
+
+        <!-- ============ COMBINED EXAMPLES ============ -->
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">🔗</span>
+                <span class="card-title">Chaining map() + filter() + reduce()</span>
+            </div>
+
+            <div class="code-block">
+                <pre>
+<span class="comment"># Problem: Double the even numbers, then find their sum</span>
+<span class="keyword">from</span> functools <span class="keyword">import</span> reduce
+
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+result = reduce(
+    <span class="keyword">lambda</span> a, b: a + b,
+    <span class="function">map</span>(<span class="keyword">lambda</span> x: x * 2,
+        <span class="function">filter</span>(<span class="keyword">lambda</span> x: x % 2 == 0, numbers)
+    )
+)
+
+print(f"Sum of doubled evens: {result}")
+
+<span class="comment"># Step-by-step breakdown:</span>
+<span class="comment"># 1. filter() → keeps [2,4,6,8,10]</span>
+<span class="comment"># 2. map() → doubles → [4,8,12,16,20]</span>
+<span class="comment"># 3. reduce() → sums → 60</span>
+                </pre>
+            </div>
+            <div class="output">
+                📤 Sum of doubled evens: 60
+            </div>
+        </div>
+
+        <!-- ============ COMPARISON TABLE ============ -->
+        <div class="comparison">
+            <h3>📊 Quick Comparison</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Function</th>
+                        <th>Purpose</th>
+                        <th>Input → Output</th>
+                        <th>Returns</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="highlight">map()</td>
+                        <td>Transform each item</td>
+                        <td>[1,2,3] → [2,4,6]</td>
+                        <td>Same length</td>
+                    </tr>
+                    <tr>
+                        <td class="highlight">filter()</td>
+                        <td>Select items that pass test</td>
+                        <td>[1,2,3,4] → [2,4]</td>
+                        <td>Same or shorter length</td>
+                    </tr>
+                    <tr>
+                        <td class="highlight">reduce()</td>
+                        <td>Combine into single value</td>
+                        <td>[1,2,3,4] → 10</td>
+                        <td>Single value</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ============ MEMORY AID ============ -->
+        <div class="card">
+            <div class="card-header">
+                <span class="icon">🧠</span>
+                <span class="card-title">Easy Memory Trick</span>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-around; text-align: center;">
+                <div style="flex: 1; min-width: 150px;">
+                    <div style="font-size: 2rem;">📦</div>
+                    <div class="highlight">map()</div>
+                    <div style="font-size: 0.9rem;">"MAPPING"<br>Change EVERY item</div>
+                </div>
+                <div style="flex: 1; min-width: 150px;">
+                    <div style="font-size: 2rem;">🔍</div>
+                    <div class="highlight" style="color:#ff6b6b;">filter()</div>
+                    <div style="font-size: 0.9rem;">"FILTERING"<br>Keep SOME items</div>
+                </div>
+                <div style="flex: 1; min-width: 150px;">
+                    <div style="font-size: 2rem;">➕</div>
+                    <div class="highlight" style="color:#f9d423;">reduce()</div>
+                    <div style="font-size: 0.9rem;">"REDUCING"<br>Collapse to ONE</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            🐍 Python Higher-Order Functions | map • filter • reduce<br>
+            <span style="font-size: 0.8rem;">"Write less, do more — functional style in Python" ✨</span>
+        </footer>
+    </div>
+</body>
+</html>

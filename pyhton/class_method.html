@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>✨ Class Methods Mastery | Instance, Static & Class Methods Explained</title>
+  <!-- Font Awesome 6 (free icons) -->
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> -->
+  <!-- Google Fonts: modern & clean -->
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet"> -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #f6f9fc 0%, #edf2f7 100%);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      color: #1a2c3e;
+      line-height: 1.5;
+      padding: 2rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* header section */
+    .hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .hero h1 {
+      font-size: 2.7rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #1E3C72, #2A5298);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .hero h1 i {
+      background: none;
+      background-clip: unset;
+      -webkit-background-clip: unset;
+      color: #2c5f8a;
+      font-size: 2.2rem;
+    }
+
+    .subhead {
+      font-size: 1.2rem;
+      color: #2c5270;
+      max-width: 750px;
+      margin: 0.75rem auto 0;
+      background: rgba(255,255,240,0.6);
+      backdrop-filter: blur(2px);
+      padding: 0.8rem 1.5rem;
+      border-radius: 48px;
+      display: inline-block;
+      width: auto;
+    }
+
+    /* method cards grid */
+    .methods-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.8rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+
+    .method-card {
+      flex: 1;
+      min-width: 280px;
+      background: white;
+      border-radius: 2rem;
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.3s;
+      backdrop-filter: blur(0px);
+      border: 1px solid rgba(166, 194, 220, 0.3);
+    }
+
+    .method-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 28px 40px -16px rgba(0, 32, 64, 0.2);
+    }
+
+    .card-header {
+      padding: 1.3rem 1.8rem;
+      border-bottom: 3px solid;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.6rem;
+    }
+
+    .instance-header { background: #eef4ff; border-bottom-color: #3b82f6; }
+    .static-header { background: #f0fdf4; border-bottom-color: #22c55e; }
+    .class-header { background: #fff7ed; border-bottom-color: #f97316; }
+    .extra-header { background: #faf5ff; border-bottom-color: #a855f7; }
+
+    .card-header i {
+      font-size: 1.9rem;
+    }
+
+    .instance-header i { color: #2563eb; }
+    .static-header i { color: #16a34a; }
+    .class-header i { color: #ea580c; }
+    .extra-header i { color: #9333ea; }
+
+    .card-body {
+      padding: 1.8rem;
+    }
+
+    .method-desc {
+      color: #2d4a6e;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      font-size: 0.95rem;
+      border-left: 4px solid #cbd5e1;
+      padding-left: 1rem;
+    }
+
+    .code-block {
+      background: #0f172a;
+      border-radius: 1.2rem;
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      margin: 1.2rem 0;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .code-block pre {
+      margin: 0;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: inherit;
+    }
+
+    .code-block code {
+      font-family: inherit;
+    }
+
+    .output-demo {
+      background: #f1f5f9;
+      border-radius: 1rem;
+      padding: 0.9rem 1.2rem;
+      margin-top: 1.2rem;
+      border-left: 5px solid #94a3b8;
+      font-family: monospace;
+      font-size: 0.85rem;
+    }
+
+    .output-title {
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #475569;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .output-title i {
+      font-size: 0.8rem;
+    }
+
+    .feature-list {
+      margin: 1rem 0 0 1rem;
+      color: #2c3e50;
+      font-size: 0.9rem;
+    }
+
+    .feature-list li {
+      margin: 0.5rem 0;
+    }
+
+    hr {
+      margin: 1rem 0;
+      border: none;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #cbd5e1, transparent);
+    }
+
+    .full-example {
+      background: #ffffffdd;
+      backdrop-filter: blur(2px);
+      border-radius: 2rem;
+      padding: 1.5rem 2rem;
+      margin: 2rem 0 2rem;
+      box-shadow: 0 12px 28px -10px rgba(0, 0, 0, 0.08);
+      border: 1px solid #cbdde9;
+    }
+
+    .full-example h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .comparison-table {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1.8rem;
+      justify-content: space-between;
+    }
+
+    .comp-item {
+      background: #f8fafc;
+      flex: 1;
+      min-width: 180px;
+      padding: 1rem;
+      border-radius: 1.2rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      border: 1px solid #e2edf2;
+    }
+
+    .comp-item h4 {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 1rem;
+      font-size: 0.85rem;
+      color: #5b6e8c;
+      border-top: 1px solid #cddfe7;
+    }
+
+    @media (max-width: 800px) {
+      body { padding: 1.2rem; }
+      .hero h1 { font-size: 2rem; }
+      .method-card { min-width: 100%; }
+    }
+
+    .badge {
+      background: #eef2ff;
+      padding: 0.2rem 0.6rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-left: 0.5rem;
+      color: #1e40af;
+    }
+  </style>
+</head>
+<body>
+  <button style="position: fixed; top: 20px; right: 20px; background: #2563eb; color: white; border: none; padding: 0.6rem 1rem; border-radius: 9999px; font-weight: 600; cursor: pointer;" onclick="location.href='index.html'"><i class="fas fa-home"></i> Home</button>
+<div class="container">
+  
+  <div class="hero">
+    <h1>
+      <i class="fas fa-code-branch"></i> 
+      Class Methods Deep Dive
+      <i class="fas fa-cogs"></i>
+    </h1>
+    <div class="subhead">
+      <i class="fas fa-graduation-cap"></i> Instance · Static · Class · & more — Python OOP explained with real examples
+    </div>
+    <p style="margin-top: 1rem; max-width: 750px; margin-left: auto; margin-right: auto; color: #2c6280;">
+      Understand the difference between <strong>instance methods</strong>, <strong>static methods</strong>, and <strong>class methods</strong> in Python, 
+      plus a bonus look at property methods. Each includes clear code & terminal-like output.
+    </p>
+  </div>
+
+  <!-- Three main method cards -->
+  <div class="methods-grid">
+    <!-- INSTANCE METHOD CARD -->
+    <div class="method-card">
+      <div class="card-header instance-header">
+        <i class="fas fa-user-check"></i> 
+        <span>Instance Method</span>
+        <span class="badge">self</span>
+      </div>
+      <div class="card-body">
+        <div class="method-desc">
+          <i class="fas fa-dot-circle" style="color:#3b82f6; margin-right: 6px;"></i> 
+          Bound to an object instance. Can access & modify instance attributes, and class attributes via <code>self.__class__</code>. 
+          Most common method type.
+        </div>
+        <div class="code-block">
+          <pre><code>class Book:
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+
+    def describe(self):          # instance method
+        return f"📖 '{self.title}' by {self.author}"
+
+# usage
+my_book = Book("Atomic Habits", "James Clear")
+print(my_book.describe())</code></pre>
+        </div>
+        <div class="output-demo">
+          <div class="output-title"><i class="fas fa-terminal"></i> Sample Output</div>
+          <pre style="margin:0; font-family: monospace;">📖 'Atomic Habits' by James Clear</pre>
+          <div style="font-size: 0.75rem; margin-top: 6px; color:#2c5a7a;"><i class="fas fa-info-circle"></i> Instance method works on specific object data.</div>
+        </div>
+        <ul class="feature-list">
+          <li><i class="fas fa-check-circle" style="color:#2563eb;"></i> First parameter = <code>self</code></li>
+          <li><i class="fas fa-check-circle" style="color:#2563eb;"></i> Can read/write instance state</li>
+          <li><i class="fas fa-check-circle" style="color:#2563eb;"></i> Called via instance: <code>obj.method()</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- STATIC METHOD CARD -->
+    <div class="method-card">
+      <div class="card-header static-header">
+        <i class="fas fa-cube"></i>
+        <span>Static Method</span>
+        <span class="badge">@staticmethod</span>
+      </div>
+      <div class="card-body">
+        <div class="method-desc">
+          <i class="fas fa-plug" style="color:#16a34a;"></i> 
+          Utility function inside a class. No <code>self</code> or <code>cls</code>. Cannot access instance/class attributes directly — pure logic.
+        </div>
+        <div class="code-block">
+          <pre><code>class MathUtils:
+    @staticmethod
+    def is_even(number):
+        return number % 2 == 0
+
+    @staticmethod
+    def add(a, b):
+        return a + b
+
+# called directly on class
+print(MathUtils.is_even(7))   # False
+print(MathUtils.add(15, 27))  # 42</code></pre>
+        </div>
+        <div class="output-demo">
+          <div class="output-title"><i class="fas fa-terminal"></i> Output</div>
+          <pre style="margin:0; font-family: monospace;">False
+42</pre>
+        </div>
+        <ul class="feature-list">
+          <li><i class="fas fa-check-circle" style="color:#16a34a;"></i> No implicit first parameter</li>
+          <li><i class="fas fa-check-circle" style="color:#16a34a;"></i> Group related functions inside class</li>
+          <li><i class="fas fa-check-circle" style="color:#16a34a;"></i> Called on class or instance</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- CLASS METHOD CARD -->
+    <div class="method-card">
+      <div class="card-header class-header">
+        <i class="fas fa-layer-group"></i>
+        <span>Class Method</span>
+        <span class="badge">@classmethod</span>
+      </div>
+      <div class="card-body">
+        <div class="method-desc">
+          <i class="fas fa-chalkboard-user" style="color:#f97316;"></i> 
+          Bound to the class, not the instance. Receives <code>cls</code> (class) as first parameter. Used for factory methods or modifying class state.
+        </div>
+        <div class="code-block">
+          <pre><code>class Car:
+    wheels = 4                     # class attribute
+    total_cars = 0
+
+    def __init__(self, model):
+        self.model = model
+        Car.total_cars += 1
+
+    @classmethod
+    def update_wheels(cls, new_count):
+        cls.wheels = new_count
+
+    @classmethod
+    def from_string(cls, car_string):
+        model = car_string.split("-")[1]
+        return cls(model)
+
+# usage
+Car.update_wheels(6)
+print(f"Wheels: {Car.wheels}")</code></pre>
+        </div>
+        <div class="output-demo">
+          <div class="output-title"><i class="fas fa-terminal"></i> Output</div>
+          <pre style="margin:0; font-family: monospace;">Wheels: 6</pre>
+        </div>
+        <ul class="feature-list">
+          <li><i class="fas fa-check-circle" style="color:#f97316;"></i> First param = <code>cls</code> (the class itself)</li>
+          <li><i class="fas fa-check-circle" style="color:#f97316;"></i> Can modify class attributes</li>
+          <li><i class="fas fa-check-circle" style="color:#f97316;"></i> Works as alternative constructors</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- EXTRA / PROPERTY METHOD (so on..) -->
+    <div class="method-card">
+      <div class="card-header extra-header">
+        <i class="fas fa-magic"></i>
+        <span>Property & More</span>
+        <span class="badge">@property</span>
+      </div>
+      <div class="card-body">
+        <div class="method-desc">
+          <i class="fas fa-gem" style="color:#a855f7;"></i> 
+          <strong>Special methods:</strong> <code>@property</code> (getter/setter), <code>@abstractmethod</code>, dunder methods. They extend OOP capabilities.
+        </div>
+        <div class="code-block">
+          <pre><code>class Temperature:
+    def __init__(self, celsius):
+        self._celsius = celsius
+
+    @property
+    def celsius(self):
+        return self._celsius
+
+    @property
+    def fahrenheit(self):
+        return (self._celsius * 9/5) + 32
+
+    @celsius.setter
+    def celsius(self, value):
+        if value < -273.15:
+            raise ValueError("Too cold!")
+        self._celsius = value
+
+temp = Temperature(25)
+print(temp.fahrenheit)   # 77.0</code></pre>
+        </div>
+        <div class="output-demo">
+          <div class="output-title"><i class="fas fa-terminal"></i> Property output</div>
+          <pre style="margin:0; font-family: monospace;">77.0</pre>
+        </div>
+        <ul class="feature-list">
+          <li><i class="fas fa-check-circle" style="color:#a855f7;"></i> <code>@property</code> → computed attributes</li>
+          <li><i class="fas fa-check-circle" style="color:#a855f7;"></i> Dunder methods: <code>__str__</code>, <code>__len__</code></li>
+          <li><i class="fas fa-check-circle" style="color:#a855f7;"></i> Abstract methods for interfaces</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLETE INTEGRATED EXAMPLE (SAME CLASS, ALL 3 TYPES) -->
+  <div class="full-example">
+    <h2><i class="fas fa-code"></i> 🐍 All-in-One Python Class</h2>
+    <p style="margin-bottom: 1rem; color:#2d4a6e;">Below class <code>Employee</code> demonstrates <strong>instance method</strong>, <strong>class method</strong>, and <strong>static method</strong> working together. Watch how class state changes.</p>
+    
+    <div class="code-block" style="background:#0b1120;">
+      <pre><code>class Employee:
+    company = "TechCorp"          # class attribute
+    emp_count = 0
+
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+        Employee.emp_count += 1
+
+    # instance method
+    def get_info(self):
+        return f"👤 {self.name} | Salary: ${self.salary} | Company: {self.company}"
+
+    # class method - modify company name for all instances
+    @classmethod
+    def change_company(cls, new_name):
+        old = cls.company
+        cls.company = new_name
+        return f"🏢 Company renamed: '{old}' ➝ '{new_name}'"
+
+    # static method - utility check
+    @staticmethod
+    def is_high_salary(salary_amount):
+        return salary_amount > 120_000
+
+# ----- demo & output -----
+e1 = Employee("Alice Chen", 95000)
+e2 = Employee("Bob Rivera", 145000)
+
+print(e1.get_info())
+print(e2.get_info())
+print(f"High salary? Bob: {Employee.is_high_salary(145000)}")
+print(Employee.change_company("InnovateX"))
+print(e1.get_info())   # reflects new company name
+print(f"Total employees: {Employee.emp_count}")</code></pre>
+    </div>
+    <div class="output-demo" style="background:#eef3fa; border-left-color:#2c6e9e;">
+      <div class="output-title"><i class="fas fa-laptop-code"></i>  ▶️ EXECUTION OUTPUT</div>
+      <pre style="margin:0; font-family: monospace; white-space: pre-wrap;">👤 Alice Chen | Salary: $95000 | Company: TechCorp
+👤 Bob Rivera | Salary: $145000 | Company: TechCorp
+High salary? Bob: True
+🏢 Company renamed: 'TechCorp' ➝ 'InnovateX'
+👤 Alice Chen | Salary: $95000 | Company: InnovateX
+Total employees: 2</pre>
+      <div style="margin-top: 8px; font-size: 0.8rem;"><i class="fas fa-lightbulb"></i> <strong>Insight:</strong> <code>change_company</code> (class method) updates class attribute for all instances; <code>is_high_salary</code> static method works standalone; instance method accesses both instance and class data.</div>
+    </div>
+  </div>
+
+  <!-- COMPARISON / QUICK REFERENCE TABLE -->
+  <div style="background: white; border-radius: 1.8rem; padding: 1.5rem; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin: 1rem 0 1rem;">
+    <h3 style="display: flex; align-items: center; gap: 12px;"><i class="fas fa-table-list"></i> Quick comparison: Instance vs Static vs Class Methods</h3>
+    <div class="comparison-table">
+      <div class="comp-item"><h4><i class="fas fa-user"></i> Instance</h4><p>👤 First param: <code>self</code><br>✅ Accesses instance attributes<br>🔁 Modifies object state<br>📌 <code>obj.method()</code></p></div>
+      <div class="comp-item"><h4><i class="fas fa-cube"></i> Static</h4><p>⚙️ No self/cls<br>🧮 Utility / helper logic<br>🚫 Cannot modify class/instance<br>📌 <code>Class.method()</code></p></div>
+      <div class="comp-item"><h4><i class="fas fa-layer-group"></i> Class</h4><p>🏷️ First param: <code>cls</code><br>🔄 Modifies class state<br>🧬 Factory methods (alternative constructors)<br>📌 <code>Class.method()</code> or instance</p></div>
+      <div class="comp-item"><h4><i class="fas fa-puzzle-piece"></i> Property</h4><p>✨ Getter/setter behavior<br>🧠 Attribute-like access with logic<br>📌 <code>@property</code> decorator</p></div>
+    </div>
+  </div>
+
+  <!-- WHEN TO USE / BEST PRACTICES -->
+  <div style="background: linear-gradient(120deg, #eef2ff, #ffffff); border-radius: 1.8rem; padding: 1.5rem 2rem; margin: 1rem 0;">
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center;">
+      <div style="flex: 2;">
+        <i class="fas fa-brain" style="font-size: 2rem; color:#1e3a5f; float: left; margin-right: 16px;"></i>
+        <h3 style="font-weight: 700;">📌 Choose the right method</h3>
+        <ul style="margin-left: 1.5rem; list-style-type: none;">
+          <li>✅ <strong>Instance method</strong> → operate on specific object data, need access to <code>self</code> attributes.</li>
+          <li>✅ <strong>Static method</strong> → pure function that logically belongs to class, doesn't touch class/instance data.</li>
+          <li>✅ <strong>Class method</strong> → need to work with class variables or create instances in an alternative way (polymorphism friendly).</li>
+          <li>✅ <strong>Property</strong> → encapsulate attribute access with validation/computed logic.</li>
+        </ul>
+      </div>
+      <div style="flex:1; text-align: center; background: #d9e8f5; border-radius: 2rem; padding: 1rem;">
+        <i class="fas fa-code-branch fa-2x"></i>
+        <p style="font-weight: 600; margin-top: 6px;">Clean & expressive OOP</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BONUS: simple call convention summary -->
+  <div style="background: #1e293b; border-radius: 1.5rem; padding: 1.3rem; color: #e2e8f0; margin-top: 1rem;">
+    <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: space-between; align-items: center;">
+      <div><i class="fas fa-bolt"></i> <strong>Calling rules:</strong> Instance method → only from instance (<code>obj.method()</code>), Static & Class → both class and instance work.</div>
+      <div><i class="fas fa-tags"></i> Decorators: <code>@staticmethod</code> , <code>@classmethod</code> , <code>@property</code></div>
+    </div>
+  </div>
+  
+  <footer>
+    <i class="fas fa-chalkboard-teacher"></i> Object-oriented programming — clarity through examples. All code snippets runnable as Python 3. <br>
+    <span style="opacity: 0.7;">💡 Master methods to write scalable, reusable and expressive classes.</span>
+  </footer>
+</div>
+</body>
+</html>

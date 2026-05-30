@@ -1,0 +1,249 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    padding: 2rem 1.5rem;
+    color: #e2e8f0;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.header h1 {
+    font-size: 2.8rem;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.subhead {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Diagram Section - Visual Memory Representation */
+.diagram-section {
+    background: #0f172a;
+    border-radius: 2rem;
+    padding: 1.8rem;
+    margin-bottom: 2rem;
+    border: 1px solid #334155;
+    box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.4);
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #cbd5e1;
+    border-left: 4px solid #3b82f6;
+    padding-left: 1rem;
+}
+
+.memory-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.8rem;
+    justify-content: center;
+}
+
+/* Stack & Heap Cards */
+.memory-card {
+    flex: 1;
+    min-width: 280px;
+    background: #1e293b;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    border: 1px solid #334155;
+}
+
+.memory-card-header {
+    background: #2d3a4e;
+    padding: 1rem 1.5rem;
+    font-weight: 700;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.memory-card-header.stack { background: #1e3a5f; border-bottom: 2px solid #3b82f6; }
+.memory-card-header.heap { background: #2d2a4e; border-bottom: 2px solid #a855f7; }
+.memory-card-header.interning { background: #2d4a3a; border-bottom: 2px solid #10b981; }
+
+.memory-content {
+    padding: 1.2rem;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
+}
+
+.stack-item {
+    background: #0f172a;
+    padding: 0.6rem 1rem;
+    margin: 0.5rem 0;
+    border-radius: 0.6rem;
+    border-left: 3px solid #3b82f6;
+    display: flex;
+    justify-content: space-between;
+}
+
+.heap-item {
+    background: #0f172a;
+    padding: 0.6rem 1rem;
+    margin: 0.5rem 0;
+    border-radius: 0.6rem;
+    border-left: 3px solid #a855f7;
+    display: flex;
+    justify-content: space-between;
+}
+
+.address {
+    color: #94a3b8;
+    font-size: 0.7rem;
+}
+
+.arrow-symbol {
+    color: #fbbf24;
+    margin: 0 0.3rem;
+}
+
+/* Visual Diagram SVG (simple but illustrative) */
+.visual-schema {
+    background: #0f172a;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    text-align: center;
+    border: 1px solid #2d3a4e;
+}
+
+.schema-title {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 1rem;
+}
+
+.schema-grid {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.stack-box {
+    background: linear-gradient(145deg, #1e3a5f, #172554);
+    padding: 1rem;
+    border-radius: 1rem;
+    min-width: 200px;
+}
+
+.heap-box {
+    background: linear-gradient(145deg, #2d2a4e, #1e1b4b);
+    padding: 1rem;
+    border-radius: 1rem;
+    min-width: 260px;
+}
+
+.stack-box h4, .heap-box h4 {
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+}
+
+.ref-line {
+    font-family: monospace;
+    font-size: 0.8rem;
+    background: #00000055;
+    padding: 0.2rem 0.5rem;
+    border-radius: 20px;
+}
+
+/* Code block */
+.code-example {
+    background: #0a0f1a;
+    border-radius: 1rem;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    border: 1px solid #334155;
+}
+
+.code-example pre {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
+    color: #e2e8f0;
+    margin: 0;
+}
+
+.keyword { color: #7c3aed; }
+.function { color: #60a5fa; }
+.string { color: #10b981; }
+.comment { color: #6b7280; }
+
+.output {
+    background: #0f172a;
+    border-radius: 0.8rem;
+    padding: 0.8rem 1rem;
+    border-left: 4px solid #f59e0b;
+    margin-top: 1rem;
+}
+
+.output pre {
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: #cbd5e1;
+}
+
+.grid-2col {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.info-card {
+    flex: 1;
+    background: #1e293b;
+    border-radius: 1rem;
+    padding: 1.2rem;
+    border: 1px solid #334155;
+}
+
+.info-card i {
+    color: #38bdf8;
+    margin-right: 8px;
+}
+
+hr {
+    border-color: #334155;
+    margin: 1.5rem 0;
+}
+
+@media (max-width: 760px) {
+    body { padding: 1rem; }
+    .header h1 { font-size: 1.8rem; }
+}

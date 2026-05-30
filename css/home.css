@@ -1,0 +1,200 @@
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+    padding: 2rem 1.5rem;
+  }
+
+  /* Main container */
+  .home-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Header Section */
+  .hero-section {
+    text-align: center;
+    margin-bottom: 3.5rem;
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  .hero-section .icon-badge {
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    display: inline-block;
+    padding: 0.5rem 1.2rem;
+    border-radius: 60px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #f0e6ff;
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.5px;
+  }
+
+  .hero-section h1 {
+    font-size: 3.2rem;
+    font-weight: 800;
+    background: linear-gradient(120deg, #ffffff, #e0d4ff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+  }
+
+  .hero-section .subtitle {
+    font-size: 1.2rem;
+    color: #e9e2ff;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  /* Card Grid */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+    margin: 2.5rem 0 3rem;
+  }
+
+  /* Modern Card Design */
+  .theory-card {
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(0px);
+    border-radius: 2rem;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    color: inherit;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+
+  .theory-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 45px -12px rgba(0, 0, 0, 0.35);
+    background: white;
+  }
+
+  .card-header {
+    padding: 1.5rem 1.8rem 0.8rem 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 2px solid #f0f2f5;
+  }
+
+  .card-icon {
+    width: 55px;
+    height: 55px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: white;
+    box-shadow: 0 8px 14px -6px rgba(102, 126, 234, 0.4);
+  }
+
+  .card-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1f36;
+    letter-spacing: -0.3px;
+  }
+
+  .card-body {
+    padding: 1.5rem 1.8rem 1.8rem 1.8rem;
+  }
+
+  .description {
+    color: #4a5568;
+    line-height: 1.5;
+    margin-bottom: 1.2rem;
+    font-size: 0.95rem;
+  }
+
+  .meta-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: #6c63ac;
+    font-weight: 500;
+    margin-top: 0.8rem;
+  }
+
+  .meta-info i {
+    font-size: 0.75rem;
+  }
+
+  .badge-topic {
+    background: #ede9fe;
+    padding: 0.25rem 0.8rem;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #5b21b6;
+  }
+
+  /* footer style */
+  .footer-info {
+    text-align: center;
+    margin-top: 3.5rem;
+    padding-top: 1.8rem;
+    border-top: 1px solid rgba(255,255,240,0.25);
+    color: #f1eaff;
+  }
+
+  .footer-info p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+
+  /* animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .cards-grid > a {
+    animation: fadeInUp 0.5s ease-out backwards;
+  }
+
+  .cards-grid > a:nth-child(1) { animation-delay: 0.05s; }
+  .cards-grid > a:nth-child(2) { animation-delay: 0.1s; }
+  .cards-grid > a:nth-child(3) { animation-delay: 0.15s; }
+  .cards-grid > a:nth-child(4) { animation-delay: 0.2s; }
+  .cards-grid > a:nth-child(5) { animation-delay: 0.25s; }
+
+  @media (max-width: 680px) {
+    body { padding: 1.2rem; }
+    .hero-section h1 { font-size: 2.2rem; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .card-header h2 { font-size: 1.3rem; }
+  }
+
+  /* additional hover effect */
+  .theory-card .card-icon {
+    transition: transform 0.2s ease;
+  }
+  .theory-card:hover .card-icon {
+    transform: scale(1.05) rotate(2deg);
+  }

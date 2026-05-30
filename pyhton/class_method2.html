@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Non-Static Methods | Instance, Class & Property Methods</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    .non-static-container {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 2.5rem;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+
+    .methods-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+
+    /* Card Styles */
+    .method-card {
+      background: white;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      flex: 1;
+      min-width: 300px;
+      max-width: 380px;
+    }
+
+    .method-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+    }
+
+    .card-header {
+      padding: 1.5rem;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-header i {
+      font-size: 2rem;
+    }
+
+    .card-header h2 {
+      font-size: 1.5rem;
+      margin: 0;
+    }
+
+    .instance-header { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .class-header { background: linear-gradient(135deg, #f093fb, #f5576c); }
+    .property-header { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #f0f0f0;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #555;
+    }
+
+    .description {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .code-block {
+      background: #1e1e1e;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      color: #d4d4d4;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .code-block .keyword { color: #569cd6; }
+    .code-block .function { color: #dcdcaa; }
+    .code-block .string { color: #ce9178; }
+    .code-block .comment { color: #6a9955; }
+
+    .output {
+      background: #2d2d2d;
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      margin-top: 1rem;
+      border-left: 4px solid #4caf50;
+    }
+
+    .output-label {
+      color: #aaa;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .output-content {
+      color: #e0e0e0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .features {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .features li {
+      margin: 0.5rem 0;
+      margin-left: 1.25rem;
+      color: #555;
+      font-size: 0.85rem;
+    }
+
+    .features i {
+      margin-right: 0.5rem;
+    }
+
+    .note {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 0.75rem;
+      margin-top: 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.85rem;
+      color: #856404;
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      .method-card { min-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="non-static-container">
+  <div class="header">
+    <h1>📘 Non-Static Methods in Python</h1>
+    <p>Instance Methods · Class Methods · Property Methods (Non-Static Only)</p>
+  </div>
+
+  <div class="methods-wrapper">
+    
+    <!-- 1️⃣ INSTANCE METHOD CARD -->
+    <div class="method-card">
+      <div class="card-header instance-header">
+        <i>🔵</i>
+        <h2>Instance Method</h2>
+      </div>
+      <div class="card-body">
+        <div class="badge">@ No decorator needed</div>
+        <div class="description">
+          <strong>Instance methods</strong> are the most common type. They take <code>self</code> as the first parameter 
+          and can access or modify both instance attributes and class attributes.
+        </div>
+        
+        <div class="code-block">
+          <pre><span class="keyword">class</span> <span class="function">Student</span>:
+    school = <span class="string">"Greenwood High"</span>  <span class="comment"># class attribute</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, name, grade):
+        self.name = name          <span class="comment"># instance attribute</span>
+        self.grade = grade
+    
+    <span class="keyword">def</span> <span class="function">get_details</span>(self):       <span class="comment"># instance method</span>
+        <span class="keyword">return</span> <span class="string">f"{self.name} - Grade {self.grade} | {self.school}"</span>
+    
+    <span class="keyword">def</span> <span class="function">promote</span>(self):
+        self.grade += 1
+        <span class="keyword">return</span> <span class="string">f"🎉 {self.name} promoted to grade {self.grade}!"</span>
+
+<span class="comment"># Creating instance and calling methods</span>
+student1 = Student(<span class="string">"Emma"</span>, 10)
+student2 = Student(<span class="string">"Liam"</span>, 9)
+
+print(student1.get_details())
+print(student2.get_details())
+print(student1.promote())</pre>
+        </div>
+        
+        <div class="output">
+          <div class="output-label">
+            <span>▶️ OUTPUT</span>
+          </div>
+          <div class="output-content">
+            Emma - Grade 10 | Greenwood High<br>
+            Liam - Grade 9 | Greenwood High<br>
+            🎉 Emma promoted to grade 11!
+          </div>
+        </div>
+        
+        <div class="features">
+          <ul style="list-style: none;">
+            <li><i>✅</i> First parameter: <strong>self</strong> (refers to instance)</li>
+            <li><i>✅</i> Can access both instance & class attributes</li>
+            <li><i>✅</i> Can modify object state</li>
+            <li><i>✅</i> Called via: <code>object.method()</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2️⃣ CLASS METHOD CARD -->
+    <div class="method-card">
+      <div class="card-header class-header">
+        <i>🟣</i>
+        <h2>Class Method</h2>
+      </div>
+      <div class="card-body">
+        <div class="badge">@classmethod decorator</div>
+        <div class="description">
+          <strong>Class methods</strong> receive the class (<code>cls</code>) as the first parameter. They can modify 
+          class state that applies to all instances. Often used as factory methods.
+        </div>
+        
+        <div class="code-block">
+          <pre><span class="keyword">class</span> <span class="function">Company</span>:
+    total_employees = 0
+    company_name = <span class="string">"TechCorp"</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, name):
+        self.employee_name = name
+        Company.total_employees += 1
+    
+    <span class="keyword">@classmethod</span>
+    <span class="keyword">def</span> <span class="function">change_company_name</span>(cls, new_name):
+        old_name = cls.company_name
+        cls.company_name = new_name
+        <span class="keyword">return</span> <span class="string">f"🏢 Name changed: {old_name} → {new_name}"</span>
+    
+    <span class="keyword">@classmethod</span>
+    <span class="keyword">def</span> <span class="function">from_string</span>(cls, emp_str):    <span class="comment"># factory method</span>
+        name = emp_str.split(<span class="string">"-"</span>)[1]
+        <span class="keyword">return</span> cls(name)
+
+<span class="comment"># Using class methods</span>
+print(<span class="string">f"Initial: {Company.company_name}"</span>)
+print(Company.change_company_name(<span class="string">"InnovateSoft"</span>))
+
+emp = Company.from_string(<span class="string">"ID-123-Sarah"</span>)
+print(<span class="string">f"Created employee: {emp.employee_name}"</span>)
+print(<span class="string">f"Company now: {Company.company_name}"</span>)</pre>
+        </div>
+        
+        <div class="output">
+          <div class="output-label">
+            <span>▶️ OUTPUT</span>
+          </div>
+          <div class="output-content">
+            Initial: TechCorp<br>
+            🏢 Name changed: TechCorp → InnovateSoft<br>
+            Created employee: Sarah<br>
+            Company now: InnovateSoft
+          </div>
+        </div>
+        
+        <div class="features">
+          <ul style="list-style: none;">
+            <li><i>✅</i> First parameter: <strong>cls</strong> (refers to class)</li>
+            <li><i>✅</i> Can modify class attributes across all instances</li>
+            <li><i>✅</i> Alternative constructors (factory methods)</li>
+            <li><i>✅</i> Called via: <code>Class.method()</code> or <code>instance.method()</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3️⃣ PROPERTY METHOD CARD -->
+    <div class="method-card">
+      <div class="card-header property-header">
+        <i>💎</i>
+        <h2>Property Method</h2>
+      </div>
+      <div class="card-body">
+        <div class="badge">@property | @getter | @setter</div>
+        <div class="description">
+          <strong>Property methods</strong> allow you to define methods that behave like attributes. 
+          They provide controlled access to instance attributes with validation logic.
+        </div>
+        
+        <div class="code-block">
+          <pre><span class="keyword">class</span> <span class="function">BankAccount</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, owner, balance):
+        self.owner = owner
+        self._balance = balance    <span class="comment"># protected attribute</span>
+    
+    <span class="keyword">@property</span>
+    <span class="keyword">def</span> <span class="function">balance</span>(self):           <span class="comment"># getter</span>
+        <span class="keyword">return</span> <span class="string">f"${self._balance:,.2f}"</span>
+    
+    <span class="keyword">@property</span>
+    <span class="keyword">def</span> <span class="function">account_summary</span>(self):   <span class="comment"># computed property</span>
+        <span class="keyword">return</span> <span class="string">f"Account of {self.owner}: {self.balance}"</span>
+    
+    <span class="keyword">@balance.setter</span>
+    <span class="keyword">def</span> <span class="function">balance</span>(self, amount):    <span class="comment"># setter with validation</span>
+        <span class="keyword">if</span> amount < 0:
+            <span class="keyword">raise</span> ValueError(<span class="string">"Balance cannot be negative!"</span>)
+        self._balance = amount
+        print(<span class="string">f"✅ Balance updated to ${amount:,.2f}"</span>)
+
+<span class="comment"># Using property methods like attributes</span>
+account = BankAccount(<span class="string">"Alice"</span>, 1000)
+print(account.account_summary)     <span class="comment"># property accessed without ()</span>
+print(account.balance)              <span class="comment"># getter</span>
+account.balance = 2500              <span class="comment"># setter</span>
+print(account.balance)</pre>
+        </div>
+        
+        <div class="output">
+          <div class="output-label">
+            <span>▶️ OUTPUT</span>
+          </div>
+          <div class="output-content">
+            Account of Alice: $1,000.00<br>
+            $1,000.00<br>
+            ✅ Balance updated to $2,500.00<br>
+            $2,500.00
+          </div>
+        </div>
+        
+        <div class="features">
+          <ul style="list-style: none;">
+            <li><i>✅</i> Methods that behave like attributes (no parentheses)</li>
+            <li><i>✅</i> Encapsulation with getter/setter logic</li>
+            <li><i>✅</i> Computed / derived properties</li>
+            <li><i>✅</i> Validation and data integrity</li>
+          </ul>
+        </div>
+
+        <div class="note">
+          💡 <strong>Note:</strong> Properties are non-static because they operate on instance data through getter/setter methods.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick comparison note -->
+  <div style="background: rgba(255,255,255,0.95); border-radius: 1rem; padding: 1.5rem; margin-top: 2rem; text-align: center;">
+    <p style="color: #333; font-size: 0.95rem;">
+      🔍 <strong>Key Takeaway:</strong> Instance, Class, and Property methods are all <strong>non-static</strong> because they interact with 
+      instance or class state. Static methods (<code>@staticmethod</code>) are the only ones that don't receive <code>self</code> or <code>cls</code>.
+    </p>
+  </div>
+</div>
+</body>
+</html>

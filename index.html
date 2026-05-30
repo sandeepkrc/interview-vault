@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>📚 Theory Hub | Python & OOP Learning Portal</title>
+  <!-- Font Awesome 6 (free icons) -->
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> -->
+
+  <!-- Google Fonts: Inter for clean typography -->
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet"> -->
+  <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+<div class="home-container">
+  
+  <!-- Hero / Welcome Section -->
+  <div class="hero-section">
+    <div class="icon-badge">
+      <i class="fas fa-graduation-cap"></i>  PYTHON DEEP DIVES
+    </div>
+    <h1>
+      <i class="fas fa-book-open"></i> Theory Library
+    </h1>
+    <div class="subtitle">
+      Explore advanced Python concepts — from OOP class methods to functional programming tools. 
+      Click any card to open the full interactive guide.
+    </div>
+  </div>
+  <div style="margin-bottom:25px;">
+  <input
+      type="text"
+      id="searchInput"
+      placeholder="🔍 Search concepts..."
+      style="
+        width:100%;
+        padding:15px 20px;
+        border:none;
+        border-radius:15px;
+        font-size:1rem;
+        outline:none;
+      "
+  >
+</div>
+
+  <!-- Cards Grid: 5 main theory pages + home is the index itself, but we also include a resource overview -->
+  <div class="cards-grid">
+    
+    <!-- 1. class_method.html -->
+    <a href="class_method.html" class="theory-card" target="_blank">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-cube"></i>
+        </div>
+        <h2>Class Methods <span style="font-size:0.8rem;">Part 1</span></h2>
+      </div>
+      <div class="card-body">
+        <div class="description">
+          Master <strong>instance methods, static methods, and class methods</strong> with clean visual examples.
+          Learn the difference between <code>@classmethod</code>, <code>@staticmethod</code> and when to use each.
+        </div>
+        <div class="meta-info">
+          <span class="badge-topic"><i class="fas fa-code"></i> OOP Basics</span>
+          <span><i class="far fa-clock"></i> 15 min read</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 2. class_method2.html -->
+    <a href="class_method2.html" class="theory-card" target="_blank">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-layer-group"></i>
+        </div>
+        <h2>Class Methods <span style="font-size:0.8rem;">Part 2</span></h2>
+      </div>
+      <div class="card-body">
+        <div class="description">
+          Deep dive into <strong>advanced class patterns</strong>, factory methods, and practical use-cases.
+          Understand how class methods enable polymorphic constructors and cleaner APIs.
+        </div>
+        <div class="meta-info">
+          <span class="badge-topic"><i class="fas fa-chalkboard-user"></i> Intermediate</span>
+          <span><i class="fas fa-gem"></i> Real-world examples</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 3. functools_blog.html -->
+    <a href="functools_blog.html" class="theory-card" target="_blank">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-blog"></i>
+        </div>
+        <h2>Functools Blog</h2>
+      </div>
+      <div class="card-body">
+        <div class="description">
+          Explore Python's <strong>functools module</strong> — <code>lru_cache</code>, <code>partial</code>, <code>wraps</code>, and higher-order function utilities that make your code efficient and elegant.
+        </div>
+        <div class="meta-info">
+          <span class="badge-topic"><i class="fas fa-rocket"></i> Functional Tools</span>
+          <span><i class="fas fa-chart-line"></i> Performance tips</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 4. map_filter_reduce_lambda.html -->
+    <a href="map_filter_reduce_lambda.html" class="theory-card" target="_blank">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-code-branch"></i>
+        </div>
+        <h2>map / filter / reduce + lambda</h2>
+      </div>
+      <div class="card-body">
+        <div class="description">
+          Functional programming essentials: <strong>map, filter, reduce</strong> combined with lambda expressions.
+          Learn declarative data transformations with clear, concise code.
+        </div>
+        <div class="meta-info">
+          <span class="badge-topic"><i class="fas fa-terminal"></i> Lambda Calculus</span>
+          <span><i class="fas fa-list-ul"></i> Iterables & comprehensions</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 5. map_filter_reduce.html -->
+    <a href="map_filter_reduce.html" class="theory-card" target="_blank">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h2>map / filter / reduce</h2>
+      </div>
+      <div class="card-body">
+        <div class="description">
+          Deep understanding of the core trio: <strong><code>map()</code>, <code>filter()</code>, <code>reduce()</code></strong> without lambda focus.
+          Build robust pipelines and master functional patterns in Python.
+        </div>
+        <div class="meta-info">
+          <span class="badge-topic"><i class="fas fa-cogs"></i> Functional Core</span>
+          <span><i class="fas fa-database"></i> Data processing</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 6. memory_management.html -->
+    <a href="memory_management.html" class="theory-card" target="_blank">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-memory"></i>
+        </div>
+        <h2>Memory Management</h2>
+      </div>
+      <div class="card-body">
+        <div class="description">
+          Deep understanding of memory management concepts in Python, including stack vs heap, garbage collection, and reference counting.
+        </div>
+        <div class="meta-info">
+          <span class="badge-topic"><i class="fas fa-cogs"></i> Runtime</span>
+          <span><i class="fas fa-database"></i> Memory internals</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 7. decorator.html -->
+    <a href="decorator.html" class="theory-card" target="_blank">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-magic"></i>
+        </div>
+        <h2>Python Decorators</h2>
+      </div>
+      <div class="card-body">
+        <div class="description">
+          Learn how decorators wrap functions and classes to add reusable behavior, logging, access control, and more.
+        </div>
+        <div class="meta-info">
+          <span class="badge-topic"><i class="fas fa-bolt"></i> Advanced</span>
+          <span><i class="fas fa-brain"></i> Metaprogramming</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- 8. generator_concept.html -->
+    <a href="generator_concept.html" class="theory-card" target="_blank">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-random"></i>
+        </div>
+        <h2>Generator Concept</h2>
+      </div>
+      <div class="card-body">
+        <div class="description">
+          Explore the power of <strong>generators</strong> in Python — <code>yield</code> keyword, lazy evaluation, and memory efficiency.
+        </div>
+        <div class="meta-info">
+          <span class="badge-topic"><i class="fas fa-lightbulb"></i> Advanced</span>
+          <span><i class="fas fa-cogs"></i> Performance</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Additional resource / shortcut bar (quick links with icons) -->
+  <div style="background: rgba(255,255,255,0.12); backdrop-filter: blur(12px); border-radius: 2rem; padding: 1.2rem 1.5rem; margin: 1rem 0 1rem;">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+      <div style="display: flex; align-items: center; gap: 10px; color: white;">
+        <i class="fas fa-link" style="font-size: 1.3rem;"></i>
+        <span style="font-weight: 500;">Quick Access:</span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+        <a href="class_method.html" target="_blank" style="background: #ffffff20; padding: 0.4rem 1rem; border-radius: 40px; color: white; text-decoration: none; font-size: 0.85rem; transition: 0.2s;"><i class="fas fa-cube"></i> class_method</a>
+        <a href="class_method2.html" target="_blank" style="background: #ffffff20; padding: 0.4rem 1rem; border-radius: 40px; color: white; text-decoration: none; font-size: 0.85rem; transition: 0.2s;"><i class="fas fa-layer-group"></i> class_method2</a>
+        <a href="decorator.html" target="_blank" style="background: #ffffff20; padding: 0.4rem 1rem; border-radius: 40px; color: white; text-decoration: none; font-size: 0.85rem; transition: 0.2s;"><i class="fas fa-magic"></i> decorator</a>
+        <a href="functools_blog.html" target="_blank" style="background: #ffffff20; padding: 0.4rem 1rem; border-radius: 40px; color: white; text-decoration: none; font-size: 0.85rem; transition: 0.2s;"><i class="fas fa-blog"></i> functools_blog</a>
+        <a href="map_filter_reduce_lambda.html" target="_blank" style="background: #ffffff20; padding: 0.4rem 1rem; border-radius: 40px; color: white; text-decoration: none; font-size: 0.85rem; transition: 0.2s;"><i class="fas fa-code-branch"></i> map_filter_reduce_lambda</a>
+        <a href="map_filter_reduce.html" target="_blank" style="background: #ffffff20; padding: 0.4rem 1rem; border-radius: 40px; color: white; text-decoration: none; font-size: 0.85rem; transition: 0.2s;"><i class="fas fa-chart-line"></i> map_filter_reduce</a>
+        <a href="memory_management.html" target="_blank" style="background: #ffffff20; padding: 0.4rem 1rem; border-radius: 40px; color: white; text-decoration: none; font-size: 0.85rem; transition: 0.2s;"><i class="fas fa-memory"></i> memory_management</a>
+        <a href="memory_management_theory.html" target="_blank" style="background: #ffffff20; padding: 0.4rem 1rem; border-radius: 40px; color: white; text-decoration: none; font-size: 0.85rem; transition: 0.2s;"><i class="fas fa-book-open"></i> memory_management_theory</a>
+        <a href="map_filter_reduce_theory.html" target="_blank" style="background: #ffffff20; padding: 0.4rem 1rem; border-radius: 40px; color: white; text-decoration: none; font-size: 0.85rem; transition: 0.2s;"><i class="fas fa-book-open"></i> map_filter_reduce_theory</a>
+        <a href="generator_concept.html" target="_blank" style="background: #ffffff20; padding: 0.4rem 1rem; border-radius: 40px; color: white; text-decoration: none; font-size: 0.85rem; transition: 0.2s;"><i class="fas fa-random"></i> generator_concept</a>
+      </div>
+    </div>
+  </div>
+  <!-- footer: navigation help -->
+  <div class="footer-info">
+    <p>
+      <i class="fas fa-external-link-alt"></i> All links open in new tabs — keep your home page accessible. 
+      Each concept page contains code examples, output demos, and detailed explanations.
+    </p>
+    <p style="margin-top: 0.8rem; font-size: 0.8rem;">
+      <i class="fas fa-folder-open"></i> Ensure all HTML files are located inside the <strong>Theoritcal/</strong> folder relative to this home page.
+    </p>
+    <p style="margin-top: 0.5rem;">
+      ⚡ Master Python: OOP · Class Methods · functools · Map/Filter/Reduce · Lambda
+    </p>
+  </div>
+</div>
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function() {
+    const value = this.value.toLowerCase();
+    const cards = document.querySelectorAll(".theory-card");
+
+    cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+
+        if (text.includes(value)) {
+            card.style.display = "";
+        } else {
+            card.style.display = "none";
+        }
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Memory Management | Stack, Heap, Garbage Collection</title>
+  <!-- Font Awesome & Google Fonts -->
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> -->
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"> -->
+<link rel="stylesheet" href="../css/memory.css">
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1><i class="fas fa-memory"></i> Python Memory Management</h1>
+    <div class="subhead">Stack · Heap · Garbage Collection · Interning & Reference Counting</div>
+        </div>
+    <a href="memory_management_theory.html" style="display: inline-block; background: #3b82f6; color: #fff; text-decoration: none; padding: 0.9rem 1.6rem; border-radius: 999px; font-weight: 700; box-shadow: 0 12px 25px -15px rgba(59,130,246,0.8);">Read Theory / Concept Details</a>
+  </div> 
+<!-- theoretical notes about what is memory management and how Python handles memory , GC, and interning here -->
+  <div class="memory-theory-link" style="background: linear-gradient(145deg, #0f172a, #1e293b); border-radius: 1.8rem; padding: 2rem; margin: 2rem 0; border: 1px solid #334155; box-shadow: 0 20px 30px -12px rgba(0,0,0,0.3); font-family: 'Inter', system-ui, sans-serif; text-align: center;">
+    <div style="margin-bottom: 1rem;">
+      <h2 style="color: #f1f5f9; font-size: 2rem; margin: 0;">📘 Memory Management Theory</h2>
+      <p style="color: #94a3b8; line-height: 1.6; font-size: 1rem; max-width: 720px; margin: 0.8rem auto;">Explore the full theory behind Python memory management, including stack vs heap, reference counting, garbage collection, and string interning on the dedicated concept page.</p>
+    </div>
+    <a href="memory_management_theory.html" style="display: inline-block; background: #3b82f6; color: #fff; text-decoration: none; padding: 0.9rem 1.6rem; border-radius: 999px; font-weight: 700; box-shadow: 0 12px 25px -15px rgba(59,130,246,0.8);">Read Theory / Concept Details</a>
+  </div>
+
+  <!-- 1. DIAGRAMMATIC VIEW (VISUAL MEMORY LAYOUT) -->
+  <div class="diagram-section">
+    <div class="section-title">
+      <i class="fas fa-diagram-project"></i> Memory Architecture Diagram
+    </div>
+    <div class="visual-schema">
+      <div class="schema-grid">
+        <!-- STACK representation -->
+        <div class="stack-box">
+          <h4><i class="fas fa-layer-group"></i> STACK (Static / Call Stack)</h4>
+          <div class="ref-line">📦 frame: main()</div>
+          <div class="ref-line">  ├─ a = 42 (int) → value stored directly (small int interning)</div>
+          <div class="ref-line">  ├─ lst = [ref@0x10F] → pointer → HEAP</div>
+          <div class="ref-line">  └─ obj = ref@0x7F8 → pointer → object in HEAP</div>
+          <div style="margin-top: 8px;"><i class="fas fa-arrow-down"></i> Function calls, local variables, references</div>
+        </div>
+        <!-- HEAP representation -->
+        <div class="heap-box">
+          <h4><i class="fas fa-cubes"></i> HEAP (Dynamic Memory)</h4>
+          <div class="ref-line">📍 0x10F → [1, 2, 3] (list object)</div>
+          <div class="ref-line">📍 0x7F8 → Person(name="Alice", age=30)</div>
+          <div class="ref-line">📍 0x3A2 → "Hello World" (string object)</div>
+          <div class="ref-line"><i class="fas fa-trash-alt"></i> Garbage Collector cleans unreachable objects</div>
+        </div>
+      </div>
+      <div class="schema-title" style="margin-top: 1rem;">
+        <i class="fas fa-exchange-alt"></i> References: Stack stores pointers to Heap objects. Primitives (small ints) may be interned / stored directly.
+     
+
+      </div>
+    </div>
+
+    <div class="memory-layout">
+      <!-- Stack detailed -->
+      <div class="memory-card">
+        <div class="memory-card-header stack">
+          <i class="fas fa-arrow-up"></i> STACK (LIFO)
+        </div>
+        <div class="memory-content">
+          <div class="stack-item"><span>📌 Frame: global</span><span class="address">refs to heap</span></div>
+          <div class="stack-item"><span>🔹 x = 100 → direct (small int cache)</span><span class="address">id(x)=140736...</span></div>
+          <div class="stack-item"><span>🔹 my_list → [🖇️]</span><span class="address">heap addr 0xABCD</span></div>
+          <div class="stack-item"><span>🔹 obj → Person object</span><span class="address">heap addr 0x1234</span></div>
+          <div class="stack-item"><span>⚡ function call: func()</span><span class="address">new frame</span></div>
+        </div>
+      </div>
+      <!-- Heap detailed -->
+      <div class="memory-card">
+        <div class="memory-card-header heap">
+          <i class="fas fa-database"></i> HEAP
+        </div>
+        <div class="memory-content">
+          <div class="heap-item"><span>📦 List object [10,20,30]</span><span class="address">@0xABCD</span></div>
+          <div class="heap-item"><span>🏷️ String "Python Memory"</span><span class="address">@0xDEAD</span></div>
+          <div class="heap-item"><span>👤 Instance of Person</span><span class="address">@0x1234</span></div>
+          <div class="heap-item"><span>📘 Dict object {"key":"val"}</span><span class="address">@0x5678</span></div>
+        </div>
+      </div>
+      <!-- Interning / special areas -->
+      <div class="memory-card">
+        <div class="memory-card-header interning">
+          <i class="fas fa-infinity"></i> Interning & Special Pools
+        </div>
+        <div class="memory-content">
+          <div class="heap-item"><span>🔢 Small integers (-5 to 256) — preallocated</span><span class="address">singleton</span></div>
+          <div class="heap-item"><span>🔤 String interning (certain strings share memory)</span><span class="address">immutable pool</span></div>
+          <div class="heap-item"><span>🧹 Generational GC: generation 0,1,2</span><span class="address">automatic</span></div>
+          <div class="heap-item"><span>📉 Reference counting + cycle detector</span><span class="address">gc module</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. CODE EXAMPLE WITH MEMORY BEHAVIOR -->
+  <div class="diagram-section">
+    <div class="section-title">
+      <i class="fas fa-laptop-code"></i> Live Code Example: References & Identity
+    </div>
+    <div class="code-example">
+      <pre><span class="keyword">import</span> sys
+<span class="keyword">import</span> gc
+
+<span class="comment"># 1. Immutability & interning (small integers)</span>
+a = 100
+b = 100
+<span class="keyword">print</span>(<span class="string">"a is b:"</span>, a <span class="keyword">is</span> b)          <span class="comment"># True (cached small int)</span>
+
+c = 1000
+d = 1000
+<span class="keyword">print</span>(<span class="string">"c is d:"</span>, c <span class="keyword">is</span> d)          <span class="comment"># False (no interning beyond range)</span>
+
+<span class="comment"># 2. Reference counting demonstration</span>
+my_list = [1, 2, 3]
+ref_count = sys.getrefcount(my_list) - 1   <span class="comment"># minus temporary ref</span>
+<span class="keyword">print</span>(<span class="string">f"Reference count of my_list: {ref_count}"</span>)
+
+another_ref = my_list
+<span class="keyword">print</span>(<span class="string">f"After new ref: {sys.getrefcount(my_list)-1}"</span>)
+
+<span class="comment"># 3. Object id() – memory address (simulated)</span>
+<span class="keyword">print</span>(<span class="string">f"Memory address (id) of my_list: {id(my_list)}"</span>)
+
+<span class="comment"># 4. Garbage collector trigger (demo)</span>
+<span class="keyword">del</span> another_ref
+<span class="keyword">print</span>(<span class="string">"After deletion, refcount decreased"</span>)</pre>
+    </div>
+    <div class="output">
+      <div><i class="fas fa-terminal"></i> <strong>Sample Output (Python 3.10+)</strong></div>
+      <pre>a is b: True
+c is d: False
+Reference count of my_list: 1
+After new ref: 2
+Memory address (id) of my_list: 140482305608000
+After deletion, refcount decreased</pre>
+    </div>
+  </div>
+
+  <!-- 3. MEMORY VISUALIZATION DIAGRAM (CUSTOM SVG-like using CSS) -->
+  <div class="diagram-section">
+    <div class="section-title">
+      <i class="fas fa-chalkboard-user"></i> Pointers & Reference Diagram
+    </div>
+    <div style="background: #0f172a; border-radius: 1.5rem; padding: 1.5rem; text-align: center;">
+      <div style="display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap;">
+        <div style="background: #1e293b; padding: 1rem; border-radius: 1rem; min-width: 220px;">
+          <i class="fas fa-microchip"></i> <strong>STACK VARIABLES</strong>
+          <div style="margin-top: 12px; text-align: left;">
+            <div>➡️ <code>name = "Python"</code>  <span style="color:#f97316;">ref → heap</span></div>
+            <div>➡️ <code>numbers = [1,2,3]</code> <span style="color:#f97316;">ref → heap</span></div>
+            <div>➡️ <code>age = 30</code> <span style="color:#10b981;">(direct maybe cached)</span></div>
+          </div>
+        </div>
+        <div style="font-size: 2rem; color: #facc15;"><i class="fas fa-long-arrow-alt-right"></i></div>
+        <div style="background: #2d2a4e; padding: 1rem; border-radius: 1rem; min-width: 250px;">
+          <i class="fas fa-dumpster-fire"></i> <strong>HEAP OBJECTS</strong>
+          <div style="margin-top: 12px; text-align: left;">
+            <div>📝 <code>str "Python"</code> (id: 0x7fA1)</div>
+            <div>📋 <code>list [1,2,3]</code> (id: 0x7fB2)</div>
+            <div>⭐ small int 30 (interned / static)</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 1rem; background: #00000040; border-radius: 1rem; padding: 0.7rem;">
+        <i class="fas fa-hand-pointer"></i> <strong>Key Insight:</strong> Variables on the stack store memory addresses (pointers) to objects stored in the heap.
+        The Python memory manager automatically allocates heap space for objects.
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. GENERATIONAL GC + REFERENCE CYCLES -->
+  <div class="grid-2col">
+    <div class="info-card">
+      <i class="fas fa-recycle fa-2x" style="color:#34d399;"></i>
+      <h3 style="margin: 10px 0;">📌 Garbage Collection (GC)</h3>
+      <p>Python uses <strong>reference counting</strong> as primary mechanism, plus a <strong>generational garbage collector</strong> to detect and collect reference cycles (circular references).</p>
+      <div style="background:#0f172a; padding: 0.6rem; border-radius: 0.8rem; margin-top: 0.6rem;">
+        <code>gc.collect()</code> → manually trigger collection.<br>
+        <code>gc.get_threshold()</code> → (700, 10, 10) generation thresholds.
+      </div>
+    </div>
+    <div class="info-card">
+      <i class="fas fa-chart-line fa-2x" style="color:#fbbf24;"></i>
+      <h3 style="margin: 10px 0;">🔢 Reference Counting</h3>
+      <p>Each object tracks how many references point to it. When count reaches 0, memory is freed immediately.</p>
+      <div class="code-example" style="margin-top: 0.5rem; padding: 0.6rem;">
+        <pre><span class="keyword">import</span> sys
+x = []
+<span class="keyword">print</span>(sys.getrefcount(x))  # includes temporary ref</pre>
+      </div>
+    </div>
+    <div class="info-card">
+      <i class="fas fa-cube fa-2x" style="color:#60a5fa;"></i>
+      <h3 style="margin: 10px 0;">🧠 Small Object Allocator</h3>
+      <p>Python uses memory pools (arenas) for small objects to reduce fragmentation and improve performance.</p>
+      <code>PyMalloc</code> → optimized allocator for objects < 512 bytes.
+    </div>
+  </div>
+
+  <!-- 5. Interactive memory example with objects -->
+  <div class="diagram-section">
+    <div class="section-title">
+      <i class="fas fa-code-branch"></i> Memory Management with Custom Class
+    </div>
+    <div class="code-example">
+      <pre><span class="keyword">class</span> <span class="function">Person</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, name, age):
+        self.name = name
+        self.age = age
+    <span class="keyword">def</span> <span class="function">__del__</span>(self):
+        <span class="keyword">print</span>(<span class="string">f"🗑️ Deleting {self.name} from memory"</span>)
+
+<span class="comment"># Create objects</span>
+p1 = Person(<span class="string">"Alice"</span>, 28)
+p2 = Person(<span class="string">"Bob"</span>, 32)
+p3 = p1   <span class="comment"># new reference to Alice</span>
+
+<span class="keyword">print</span>(<span class="string">"Ref count of p1:"</span>, sys.getrefcount(p1)-1)
+<span class="keyword">del</span> p1
+<span class="keyword">print</span>(<span class="string">"After deleting p1, p3 still references Alice"</span>)
+<span class="keyword">del</span> p3
+<span class="keyword">print</span>(<span class="string">"Now both references removed — Alice object becomes garbage"</span>)</pre>
+    </div>
+    <div class="output">
+      <pre>Ref count of p1: 2
+After deleting p1, p3 still references Alice
+Now both references removed — Alice object becomes garbage
+🗑️ Deleting Alice from memory</pre>
+      <div style="margin-top: 8px; font-size: 0.8rem; color:#94a3b8;">
+        <i class="fas fa-info-circle"></i> The <code>__del__</code> method is called when reference count drops to 0 (immediately).
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Interning & String Immutability -->
+  <div class="diagram-section">
+    <div class="section-title">
+      <i class="fas fa-link"></i> String Interning & Memory Optimization
+    </div>
+    <div class="code-example">
+      <pre>s1 = <span class="string">"hello_world"</span>
+s2 = <span class="string">"hello_world"</span>
+<span class="keyword">print</span>(s1 <span class="keyword">is</span> s2)   <span class="comment"># True (interned by interpreter for compile-time strings)</span>
+
+s3 = <span class="string">"hello"</span> + <span class="string">"_world"</span>
+<span class="keyword">print</span>(s1 <span class="keyword">is</span> s3)   <span class="comment"># May be False or True depending on optimization (usually True due to interning)</span>
+
+<span class="comment"># Explicit interning using sys.intern()</span>
+<span class="keyword">import</span> sys
+s4 = sys.intern(<span class="string">"dynamic string!"</span>)
+s5 = sys.intern(<span class="string">"dynamic string!"</span>)
+<span class="keyword">print</span>(s4 <span class="keyword">is</span> s5)   <span class="comment"># True</span></pre>
+    </div>
+    <div class="output">
+      <pre>True
+True
+True</pre>
+      <p style="margin-top: 0.5rem;"><i class="fas fa-lightbulb"></i> Interning saves memory by reusing immutable string objects. Python automatically interns some strings.</p>
+    </div>
+  </div>
+
+  <!-- 7. Memory Profiling and Tools -->
+  <div class="grid-2col" style="margin-bottom: 2rem;">
+    <div class="info-card">
+      <i class="fas fa-chart-simple"></i>
+      <h3>📊 Debug Memory Leaks</h3>
+      <p><code>tracemalloc</code> module — track memory blocks allocated by Python.</p>
+      <div class="code-example" style="margin-top: 0.5rem; padding: 0.5rem;">
+        <pre><span class="keyword">import</span> tracemalloc
+tracemalloc.start()
+<span class="comment"># ... code ...</span>
+snapshot = tracemalloc.take_snapshot()</pre>
+      </div>
+    </div>
+    <div class="info-card">
+      <i class="fas fa-garbage-can"></i>
+      <h3>⚙️ gc module insights</h3>
+      <p>Inspect unreachable objects, disable GC, or manually collect.</p>
+      <div class="code-example" style="margin-top: 0.5rem; padding: 0.5rem;">
+        <pre><span class="keyword">import</span> gc
+gc.collect()
+gc.get_stats()  <span class="comment"># shows collection counts</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer summary -->
+  <hr>
+  <div style="text-align: center; padding: 1rem; color: #94a3b8;">
+    <i class="fas fa-brain"></i> Python's memory management is automatic but understanding stack vs heap, reference counting, and GC helps write efficient code.  
+    <br><span style="font-size: 0.75rem;">🔹 Objects live in Heap · References live in Stack 🔹</span>
+  </div>
+</div>
+</body>
+</html>

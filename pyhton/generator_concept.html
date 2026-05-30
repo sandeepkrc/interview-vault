@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Generators | Lazy Evaluation & Memory Efficiency</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/g.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header Section -->
+    <header class="hero">
+      <div class="hero-badge">
+        <i class="fas fa-bolt"></i> PYTHON DEEP DIVE
+      </div>
+      <h1>
+        <i class="fas fa-stream"></i> Generators in Python
+      </h1>
+      <p class="subtitle">Lazy evaluation · Memory efficiency · Infinite sequences · The <code>yield</code> magic</p>
+    </header>
+
+    <!-- What is Generator (Theory) -->
+    <section class="theory-card">
+      <div class="card-header">
+        <i class="fas fa-question-circle"></i>
+        <h2>What is a Generator?</h2>
+      </div>
+      <div class="card-body">
+        <p>A <strong class="highlight">generator</strong> is a special type of <strong>iterable</strong> that generates values on the fly using the <code class="inline-code">yield</code> keyword instead of <code>return</code>. Unlike regular functions that compute all values at once and return them, generators produce one value at a time — only when requested.</p>
+        
+        <div class="info-box">
+          <i class="fas fa-lightbulb"></i>
+          <div>
+            <strong>Key Insight:</strong> Generators remember their state between calls. When a generator function yields, its local variables and execution position are saved, and resumed on the next call to <code>next()</code>.
+          </div>
+        </div>
+
+        <div class="code-visual">
+          <pre><span class="keyword">def</span> <span class="function">simple_generator</span>():
+    <span class="keyword">yield</span> <span class="number">1</span>
+    <span class="keyword">yield</span> <span class="number">2</span>
+    <span class="keyword">yield</span> <span class="number">3</span>
+
+gen = simple_generator()
+<span class="function">print</span>(<span class="function">next</span>(gen))  <span class="comment"># 1</span>
+<span class="function">print</span>(<span class="function">next</span>(gen))  <span class="comment"># 2</span>
+<span class="function">print</span>(<span class="function">next</span>(gen))  <span class="comment"># 3</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Need Generators? (Use Cases) -->
+    <section class="theory-card">
+      <div class="card-header">
+        <i class="fas fa-chart-line"></i>
+        <h2>Why Use Generators? • When to Use?</h2>
+      </div>
+      <div class="card-body">
+        <div class="grid-2col">
+          <div class="use-case">
+            <i class="fas fa-memory"></i>
+            <h3>Memory Efficiency</h3>
+            <p>Process large datasets (logs, huge files, infinite streams) <strong>without loading everything into RAM</strong>. A generator produces one item at a time.</p>
+          </div>
+          <div class="use-case">
+            <i class="fas fa-infinity"></i>
+            <h3>Infinite Sequences</h3>
+            <p>Represent infinite series (Fibonacci, prime numbers) that never end — impossible with lists.</p>
+          </div>
+          <div class="use-case">
+            <i class="fas fa-tachometer-alt"></i>
+            <h3>Lazy Evaluation</h3>
+            <p>Compute values <strong>only when needed</strong> — improves performance for expensive operations.</p>
+          </div>
+          <div class="use-case">
+            <i class="fas fa-pipeline"></i>
+            <h3>Pipelining Data</h3>
+            <p>Chain generators to build efficient data processing pipelines (Unix-like filters).</p>
+          </div>
+        </div>
+        <div class="real-world">
+          <i class="fas fa-database"></i>
+          <strong>Real-world examples:</strong> Reading huge CSV/JSON files, streaming API responses, processing sensor data, generating paginated results.
+        </div>
+      </div>
+    </section>
+
+    <!-- Iterator vs Generator + Advantages -->
+    <section class="theory-card">
+      <div class="card-header">
+        <i class="fas fa-code-branch"></i>
+        <h2>Iterator vs Generator • Advantages</h2>
+      </div>
+      <div class="card-body">
+        <div class="compare-table-wrapper">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>Aspect</th>
+                <th>Iterator <i class="fas fa-arrow-right"></i></th>
+                <th>Generator <i class="fas fa-star-of-life"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Implementation</td><td>Requires <code>__iter__()</code> & <code>__next__()</code> methods in a class</td><td>Simple function with <code>yield</code> keyword (or generator expression)</td></tr>
+              <tr><td>State Management</td><td>Manual — store state using instance variables</td><td>Automatic — Python preserves local state between yields</td></tr>
+              <tr><td>Memory Usage</td><td>Can be memory efficient but more boilerplate</td><td>Highly memory efficient — values generated on-the-fly</td></tr>
+              <tr><td>Code Length</td><td>More verbose (class structure needed)</td><td>Concise and readable (function-based)</td></tr>
+              <tr><td>Syntactic Sugar</td><td>No built-in sugar</td><td>Generator expressions: <code>(x*2 for x in range(10))</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="adv-section">
+          <h3><i class="fas fa-gem"></i> Advantages of Generators over Iterators</h3>
+          <ul>
+            <li><i class="fas fa-check-circle"></i> <strong>Less code</strong> — one function instead of a full class</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Cleaner state management</strong> — no need for tracking internal counters</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Automatic <code>StopIteration</code></strong> — handled when function returns</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Generator expressions</strong> — lightweight alternative to list comprehensions</li>
+            <li><i class="fas fa-check-circle"></i> <strong>Two-way communication</strong> — using <code>.send()</code> and <code>.throw()</code> (advanced coroutines)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Code Example Section (Live demonstration) -->
+    <section class="demo-section">
+      <div class="card-header">
+        <i class="fas fa-laptop-code"></i>
+        <h2>Code Examples: Generators in Action</h2>
+      </div>
+      <div class="card-body">
+        <!-- Example 1: Memory Comparison -->
+        <div class="code-block">
+          <div class="code-title">
+            <i class="fab fa-python"></i> Example 1: Memory Efficiency — List vs Generator
+          </div>
+          <pre><span class="keyword">import</span> sys
+
+<span class="comment"># List: stores all 1 million numbers in memory</span>
+squares_list = [x**2 <span class="keyword">for</span> x <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1_000_000</span>)]
+list_memory = sys.getsizeof(squares_list)
+<span class="function">print</span>(<span class="string">f"List memory: {list_memory:,} bytes"</span>)
+
+<span class="comment"># Generator: produces one value at a time</span>
+squares_gen = (x**2 <span class="keyword">for</span> x <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1_000_000</span>))
+gen_memory = sys.getsizeof(squares_gen)
+<span class="function">print</span>(<span class="string">f"Generator memory: {gen_memory:,} bytes"</span>)
+<span class="function">print</span>(<span class="string">f"⏺ Generator uses ~{list_memory // gen_memory}x less memory!"</span>)</pre>
+          <div class="output-demo">
+            <i class="fas fa-terminal"></i> Output:
+            <pre>List memory: 8,000,056 bytes
+Generator memory: 112 bytes
+⏺ Generator uses ~71,429x less memory!</pre>
+          </div>
+        </div>
+
+        <!-- Example 2: Custom Generator Function -->
+        <div class="code-block">
+          <div class="code-title">
+            <i class="fab fa-python"></i> Example 2: Fibonacci Generator (Infinite Sequence)
+          </div>
+          <pre><span class="keyword">def</span> <span class="function">fibonacci_generator</span>():
+    a, b = <span class="number">0</span>, <span class="number">1</span>
+    <span class="keyword">while</span> <span class="keyword">True</span>:
+        <span class="keyword">yield</span> a
+        a, b = b, a + b
+
+fib = fibonacci_generator()
+fib_numbers = [<span class="function">next</span>(fib) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(<span class="number">10</span>)]
+<span class="function">print</span>(<span class="string">f"First 10 Fibonacci: {fib_numbers}"</span>)</pre>
+          <div class="output-demo">
+            <i class="fas fa-terminal"></i> Output:
+            <pre>First 10 Fibonacci: [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]</pre>
+          </div>
+        </div>
+
+        <!-- Example 3: Reading Large File (Simulated) -->
+        <div class="code-block">
+          <div class="code-title">
+            <i class="fab fa-python"></i> Example 3: Processing Large File Line by Line (No RAM blow-up)
+          </div>
+          <pre><span class="keyword">def</span> <span class="function">read_large_file</span>(file_path):
+    <span class="keyword">with</span> <span class="function">open</span>(file_path, <span class="string">'r'</span>) <span class="keyword">as</span> file:
+        <span class="keyword">for</span> line <span class="keyword">in</span> file:
+            <span class="keyword">yield</span> line.strip()   <span class="comment"># yields one line at a time</span>
+
+<span class="comment"># Usage: iterate without loading entire file</span>
+<span class="keyword">for</span> i, line <span class="keyword">in</span> <span class="function">enumerate</span>(read_large_file(<span class="string">'huge_log.txt'</span>)):
+    <span class="keyword">if</span> i >= <span class="number">5</span>: <span class="keyword">break</span>
+    <span class="function">print</span>(line)</pre>
+          <div class="output-demo">
+            <i class="fas fa-terminal"></i> Output:
+            <pre>[First 5 lines of the file — memory usage is minimal regardless of file size]</pre>
+          </div>
+        </div>
+
+        <!-- Example 4: Custom Iterator vs Generator Comparison -->
+        <div class="code-block">
+          <div class="code-title">
+            <i class="fab fa-python"></i> Example 4: Iterator Class vs Generator Function (Same Logic)
+          </div>
+          <pre><span class="comment"># Custom Iterator (verbose)</span>
+<span class="keyword">class</span> <span class="class-name">CounterIterator</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, limit):
+        self.limit = limit
+        self.current = <span class="number">0</span>
+    <span class="keyword">def</span> <span class="function">__iter__</span>(self):
+        <span class="keyword">return</span> self
+    <span class="keyword">def</span> <span class="function">__next__</span>(self):
+        <span class="keyword">if</span> self.current >= self.limit:
+            <span class="keyword">raise</span> StopIteration
+        self.current += <span class="number">1</span>
+        <span class="keyword">return</span> self.current
+
+<span class="comment"># Generator (concise)</span>
+<span class="keyword">def</span> <span class="function">counter_generator</span>(limit):
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, limit + <span class="number">1</span>):
+        <span class="keyword">yield</span> i
+
+<span class="function">print</span>(<span class="string">"Iterator output:"</span>, <span class="function">list</span>(CounterIterator(<span class="number">5</span>)))
+<span class="function">print</span>(<span class="string">"Generator output:"</span>, <span class="function">list</span>(counter_generator(<span class="number">5</span>)))</pre>
+          <div class="output-demo">
+            <i class="fas fa-terminal"></i> Output:
+            <pre>Iterator output: [1, 2, 3, 4, 5]
+Generator output: [1, 2, 3, 4, 5]</pre>
+            <div class="note-small">✨ Generator accomplishes the same in <strong>6 lines</strong> vs <strong>12 lines</strong> for the iterator class.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Generator vs Iterator Visual Summary -->
+    <section class="summary-card">
+      <div class="card-header">
+        <i class="fas fa-chalkboard-user"></i>
+        <h2>Quick Summary: Generator Advantages</h2>
+      </div>
+      <div class="card-body">
+        <div class="summary-grid">
+          <div class="summary-item">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>✅ Memory Efficient</span>
+          </div>
+          <div class="summary-item">
+            <i class="fas fa-infinity"></i>
+            <span>✅ Infinite Sequences</span>
+          </div>
+          <div class="summary-item">
+            <i class="fas fa-code"></i>
+            <span>✅ Less Boilerplate</span>
+          </div>
+          <div class="summary-item">
+            <i class="fas fa-clock"></i>
+            <span>✅ Lazy Evaluation</span>
+          </div>
+          <div class="summary-item">
+            <i class="fas fa-exchange-alt"></i>
+            <span>✅ State Suspension</span>
+          </div>
+          <div class="summary-item">
+            <i class="fas fa-stream"></i>
+            <span>✅ Pipeline Friendly</span>
+          </div>
+        </div>
+        <div class="footer-note">
+          <i class="fas fa-book"></i> <strong>Pro Tip:</strong> Use generator expressions <code>(x for x in range(10))</code> for simple cases — they're like list comprehensions but lazy.
+        </div>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <p><i class="fas fa-graduation-cap"></i> Generators are fundamental to writing scalable Python code — they decouple iteration from storage.</p>
+      <p>🔁 <code>yield</code> vs <code>return</code> — Generator uses <code>yield</code> to produce values while preserving state.</p>
+    </footer>
+  </div>
+</body>
+</html>

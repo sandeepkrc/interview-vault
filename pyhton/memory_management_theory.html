@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Memory Management Theory | Stack, Heap, GC, Interning</title>
+  <link rel="stylesheet" href="../css/memory.css">
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1><i class="fas fa-memory"></i> Memory Management Theory</h1>
+    <div class="subhead">Concepts, Garbage Collection, Reference Counting & Interning</div>
+  </div>
+  <div style="margin: 1rem 0; text-align: center;">
+    <a href="memory_management.html" style="display: inline-block; background: #3b82f6; color: #fff; text-decoration: none; padding: 0.9rem 1.6rem; border-radius: 999px; font-weight: 700;">Back to Memory Management Page</a>
+  </div>
+
+  <div class="memory-theory-notes" style="background: linear-gradient(145deg, #0f172a, #1e293b); border-radius: 1.8rem; padding: 2rem; margin: 2rem 0; border: 1px solid #334155; box-shadow: 0 20px 30px -12px rgba(0,0,0,0.3); font-family: 'Inter', system-ui, sans-serif;">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1.8rem; border-bottom: 2px solid #3b82f6; padding-bottom: 0.8rem;">
+      <i class="fas fa-microchip" style="font-size: 2rem; color: #60a5fa;"></i>
+      <h2 style="color: #f1f5f9; font-size: 1.7rem; font-weight: 700; margin: 0;">📖 Memory Management in Python</h2>
+    </div>
+    <div style="background: #1e293b; border-radius: 1.2rem; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; border-left: 5px solid #38bdf8;">
+      <p style="color: #cbd5e6; line-height: 1.6; font-size: 1rem;">
+        <strong style="color: #facc15;">What is Memory Management?</strong> — Memory management is the process of controlling and coordinating how a computer program allocates, uses, and frees memory.
+        In Python, memory management is <strong>automatic</strong> — developers don't need to manually allocate or deallocate memory. Python uses a <strong>private heap</strong> to store all objects and data structures.
+      </p>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2rem;">
+      <div style="flex: 1; min-width: 250px; background: #0f172a; border-radius: 1.2rem; padding: 1.2rem; border-top: 3px solid #3b82f6;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
+          <i class="fas fa-layer-group" style="color: #3b82f6; font-size: 1.5rem;"></i>
+          <h3 style="color: #e2e8f0; margin: 0;">🗃️ Stack Memory</h3>
+        </div>
+        <ul style="color: #94a3b8; line-height: 1.7; padding-left: 1.2rem;">
+          <li>Stores <strong>static data</strong> — function calls, local variables, and references to heap objects.</li>
+          <li>Managed in <strong>LIFO (Last-In-First-Out)</strong> order.</li>
+          <li>Fast access but <strong>limited size</strong> (stack overflow risk).</li>
+          <li>Each thread gets its own stack.</li>
+          <li>Variables are <strong>automatically deallocated</strong> when function exits.</li>
+        </ul>
+      </div>
+      <div style="flex: 1; min-width: 250px; background: #0f172a; border-radius: 1.2rem; padding: 1.2rem; border-top: 3px solid #a855f7;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
+          <i class="fas fa-database" style="color: #a855f7; font-size: 1.5rem;"></i>
+          <h3 style="color: #e2e8f0; margin: 0;">🏗️ Heap Memory</h3>
+        </div>
+        <ul style="color: #94a3b8; line-height: 1.7; padding-left: 1.2rem;">
+          <li>Stores <strong>all Python objects</strong> — lists, dicts, instances, strings, etc.</li>
+          <li>Managed by Python's <strong>memory manager</strong> (allocator).</li>
+          <li>Slower than stack but <strong>dynamic & flexible</strong>.</li>
+          <li>Objects are accessed via <strong>references (pointers)</strong> stored in stack.</li>
+          <li>Heap memory is cleaned by <strong>Garbage Collector</strong> when no longer referenced.</li>
+        </ul>
+      </div>
+    </div>
+    <div style="background: #1e293b; border-radius: 1.2rem; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem;">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+        <i class="fas fa-cogs" style="color: #10b981; font-size: 1.4rem;"></i>
+        <h3 style="color: #e2e8f0; margin: 0;">🔧 How Python Handles Memory</h3>
+      </div>
+      <ul style="color: #cbd5e6; line-height: 1.7; padding-left: 1.2rem;">
+        <li><strong>Private Heap:</strong> All objects live in a private heap managed by Python Memory Manager.</li>
+        <li><strong>Reference Counting:</strong> Primary mechanism — each object tracks how many references point to it. When count reaches 0, memory is freed <strong>immediately</strong>.</li>
+        <li><strong>Garbage Collector (GC):</strong> Handles <strong>circular references</strong> (objects referencing each other). Uses <strong>generational garbage collection</strong> (generations 0, 1, 2) for efficiency.</li>
+        <li><strong>Memory Pools (Arenas):</strong> For objects smaller than 512 bytes, Python uses pre-allocated pools to reduce fragmentation and speed up allocation.</li>
+        <li><strong>Small Integer Caching:</strong> Integers from <strong>-5 to 256</strong> are pre-allocated (singletons) for performance.</li>
+        <li><strong>String Interning:</strong> Python may reuse immutable string objects to save memory (especially for identifiers and compile-time strings).</li>
+      </ul>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1.5rem;">
+      <div style="flex: 1; background: #0f172a; border-radius: 1.2rem; padding: 1.2rem;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.8rem;">
+          <i class="fas fa-recycle" style="color: #f59e0b; font-size: 1.3rem;"></i>
+          <h4 style="color: #f1f5f9; margin: 0;">🗑️ Garbage Collection (GC) Details</h4>
+        </div>
+        <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.5;">Python's GC is <strong>supplemental</strong> to reference counting. It detects and collects <strong>reference cycles</strong> (e.g., two objects referencing each other).</p>
+        <ul style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.6rem; padding-left: 1rem;">
+          <li><code>gc.collect()</code> — manually trigger collection.</li>
+          <li><code>gc.get_threshold()</code> — returns (gen0, gen1, gen2) thresholds (default 700, 10, 10).</li>
+          <li><code>gc.disable() / gc.enable()</code> — control GC behavior.</li>
+        </ul>
+      </div>
+      <div style="flex: 1; background: #0f172a; border-radius: 1.2rem; padding: 1.2rem;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.8rem;">
+          <i class="fas fa-link" style="color: #34d399; font-size: 1.3rem;"></i>
+          <h4 style="color: #f1f5f9; margin: 0;">🔗 String Interning & Caching</h4>
+        </div>
+        <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.5;">Python reuses immutable objects to save memory:</p>
+        <ul style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.6rem; padding-left: 1rem;">
+          <li><strong>Small ints (-5..256)</strong> — always pre-cached.</li>
+          <li><strong>Compile-time strings</strong> — automatically interned.</li>
+          <li><code>sys.intern()</code> — manually intern strings for memory optimization.</li>
+          <li>Interning reduces duplication but increases lookup cost.</li>
+        </ul>
+      </div>
+    </div>
+    <div style="background: #0a0f1a; border-radius: 1rem; padding: 1rem; margin: 1rem 0; border: 1px solid #334155;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.6rem;">
+        <i class="fas fa-code" style="color: #38bdf8;"></i>
+        <span style="color: #cbd5e6; font-weight: 600;">📝 Quick Example: Reference Counting</span>
+      </div>
+      <pre style="background: #0a0f1a; padding: 0.8rem; border-radius: 0.6rem; overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #e2e8f0; margin: 0;">
+import sys
+x = [1, 2, 3]
+# Reference count = 1
+y = x                # now count = 2
+print(sys.getrefcount(x) - 1)   # Output: 2
+# Deleting references
+del y                # count goes back to 1
+del x                # count = 0 → object freed</pre>
+    </div>
+    <div style="background: linear-gradient(95deg, #1e293b, #0f172a); border-radius: 1rem; padding: 1rem 1.2rem; border-left: 5px solid #facc15; margin-top: 1rem;">
+      <p style="color: #facc15; font-weight: 700; margin-bottom: 0.5rem;">🎯 Key Takeaways</p>
+      <ul style="color: #cbd5e6; font-size: 0.9rem; line-height: 1.6; padding-left: 1.2rem;">
+        <li>Python uses <strong>automatic memory management</strong> — no manual malloc/free.</li>
+        <li>Stack holds <strong>references</strong> and primitive data; Heap holds <strong>actual objects</strong>.</li>
+        <li><strong>Reference counting</strong> handles most memory cleanup instantly.</li>
+        <li><strong>Generational GC</strong> handles circular references efficiently.</li>
+        <li><strong>Interning & Caching</strong> optimize memory for small ints and strings.</li>
+        <li>Use <code>sys.getrefcount()</code>, <code>id()</code>, and <code>gc</code> module to inspect memory behavior.</li>
+      </ul>
+    </div>
+    <div style="text-align: center; margin-top: 1.2rem; font-size: 0.75rem; color: #6b7280; border-top: 1px solid #334155; padding-top: 1rem;">
+      <i class="fas fa-memory"></i> Understanding memory management helps write memory-efficient Python code and avoid leaks.
+    </div>
+  </div>
+</div>
+</body>
+</html>

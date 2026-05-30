@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Decorators | The Ultimate Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0a0f1a 0%, #0f172a 100%);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: #e2e8f0;
+      line-height: 1.5;
+      padding: 2rem 1.5rem;
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .hero {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .hero-badge {
+      background: linear-gradient(135deg, #7c3aed20, #3b82f620);
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #a78bfa;
+      margin-bottom: 1rem;
+      border: 1px solid #7c3aed40;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #c084fc, #60a5fa, #facc15);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #94a3b8;
+      max-width: 750px;
+      margin: 0 auto;
+    }
+
+    .subtitle code {
+      background: #1e293b;
+      padding: 0.2rem 0.5rem;
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+      color: #facc15;
+    }
+
+    /* Card Styles */
+    .card {
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(2px);
+      border-radius: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid #334155;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-header {
+      background: linear-gradient(95deg, #1e293b, #0f172a);
+      padding: 1.2rem 1.8rem;
+      border-bottom: 2px solid #8b5cf6;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-header i {
+      font-size: 1.8rem;
+      color: #a78bfa;
+    }
+
+    .card-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .card-body {
+      padding: 1.6rem 1.8rem;
+    }
+
+    /* Info Box */
+    .info-box {
+      background: #1e293b;
+      border-left: 4px solid #facc15;
+      padding: 1rem 1.2rem;
+      border-radius: 1rem;
+      margin: 1rem 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .info-box i {
+      font-size: 1.4rem;
+      color: #facc15;
+    }
+
+    .warning-box {
+      background: #2d1f1f;
+      border-left: 4px solid #ef4444;
+      padding: 1rem 1.2rem;
+      border-radius: 1rem;
+      margin: 1rem 0;
+      display: flex;
+      gap: 12px;
+    }
+
+    .warning-box i {
+      color: #ef4444;
+      font-size: 1.3rem;
+    }
+
+    /* Code Blocks */
+    .code-block {
+      background: #0a0f1a;
+      border-radius: 1rem;
+      margin: 1.2rem 0;
+      border: 1px solid #334155;
+      overflow: hidden;
+    }
+
+    .code-title {
+      background: #1e293b;
+      padding: 0.6rem 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #94a3b8;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .code-title i {
+      color: #facc15;
+    }
+
+    .code-block pre {
+      padding: 1rem;
+      margin: 0;
+      overflow-x: auto;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      color: #e2e8f0;
+    }
+
+    .output-demo {
+      background: #0f172a;
+      border-top: 1px solid #334155;
+      padding: 0.7rem 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: #a5f3c3;
+    }
+
+    .output-demo i {
+      margin-right: 6px;
+      color: #60a5fa;
+    }
+
+    .keyword { color: #c084fc; }
+    .function { color: #60a5fa; }
+    .decorator { color: #facc15; }
+    .string { color: #10b981; }
+    .comment { color: #6b7280; }
+    .number { color: #fbbf24; }
+
+    .inline-code {
+      background: #1e293b;
+      padding: 0.2rem 0.4rem;
+      border-radius: 6px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: #facc15;
+    }
+
+    /* Grid Layout */
+    .grid-2col {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    .use-case {
+      flex: 1;
+      min-width: 200px;
+      background: #0f172a;
+      padding: 1rem;
+      border-radius: 1rem;
+      border: 1px solid #334155;
+    }
+
+    .use-case i {
+      font-size: 2rem;
+      color: #a78bfa;
+      margin-bottom: 0.5rem;
+    }
+
+    .use-case h3 {
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+      color: #cbd5e6;
+    }
+
+    .use-case p {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    /* Table */
+    .decorator-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #0f172a;
+      border-radius: 1rem;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+
+    .decorator-table th {
+      background: #1e293b;
+      padding: 0.8rem;
+      text-align: left;
+      color: #facc15;
+      font-weight: 600;
+    }
+
+    .decorator-table td {
+      padding: 0.8rem;
+      border-bottom: 1px solid #334155;
+      color: #cbd5e6;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding: 1rem;
+      border-top: 1px solid #334155;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 1rem; }
+      .hero h1 { font-size: 2rem; }
+      .card-header h2 { font-size: 1.2rem; }
+      .card-body { padding: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <!-- Header -->
+  <div class="hero">
+    <div class="hero-badge">
+      <i class="fas fa-magic"></i> PYTHON DESIGN PATTERNS
+    </div>
+    <h1>
+      <i class="fas fa-at"></i> Decorators in Python
+    </h1>
+    <div class="subtitle">
+      <code>@decorator</code> — Modify or enhance functions without changing their source code.<br>
+      A powerful metaprogramming technique for reusable functionality.
+    </div>
+  </div>
+
+  <!-- THEORY: What is a Decorator? -->
+  <div class="card">
+    <div class="card-header">
+      <i class="fas fa-question-circle"></i>
+      <h2>📖 What is a Decorator? (Theory)</h2>
+    </div>
+    <div class="card-body">
+      <p>A <strong class="inline-code">decorator</strong> is a function that takes another function as an argument, extends or modifies its behavior, and returns a new function — <strong>without permanently modifying the original function</strong>. Decorators are applied using the <code>@decorator_name</code> syntax.</p>
+      
+      <div class="info-box">
+        <i class="fas fa-lightbulb"></i>
+        <div>
+          <strong>Core Concept:</strong> Functions in Python are <strong>first-class citizens</strong> — they can be passed as arguments, returned from other functions, and assigned to variables. Decorators leverage this property to wrap functions with additional logic.
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-title">
+          <i class="fas fa-code"></i> Basic Decorator Syntax
+        </div>
+        <pre><span class="keyword">def</span> <span class="function">my_decorator</span>(func):
+    <span class="keyword">def</span> <span class="function">wrapper</span>():
+        <span class="function">print</span>(<span class="string">"Something before the function"</span>)
+        func()
+        <span class="function">print</span>(<span class="string">"Something after the function"</span>)
+    <span class="keyword">return</span> wrapper
+
+<span class="decorator">@my_decorator</span>
+<span class="keyword">def</span> <span class="function">say_hello</span>():
+    <span class="function">print</span>(<span class="string">"Hello!"</span>)
+
+say_hello()
+<span class="comment"># Output:
+# Something before the function
+# Hello!
+# Something after the function</span></pre>
+        <div class="output-demo">
+          <i class="fas fa-terminal"></i> Output:
+          <pre>Something before the function
+Hello!
+Something after the function</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY USE DECORATORS? -->
+  <div class="card">
+    <div class="card-header">
+      <i class="fas fa-chart-line"></i>
+      <h2>🎯 Why Use Decorators? (Use Cases)</h2>
+    </div>
+    <div class="card-body">
+      <div class="grid-2col">
+        <div class="use-case">
+          <i class="fas fa-clock"></i>
+          <h3>⏱️ Timing / Logging</h3>
+          <p>Measure function execution time or log calls for debugging.</p>
+        </div>
+        <div class="use-case">
+          <i class="fas fa-lock"></i>
+          <h3>🔐 Authentication / Authorization</h3>
+          <p>Check user permissions before executing protected functions.</p>
+        </div>
+        <div class="use-case">
+          <i class="fas fa-database"></i>
+          <h3>💾 Caching (Memoization)</h3>
+          <p>Cache expensive function results to improve performance.</p>
+        </div>
+        <div class="use-case">
+          <i class="fas fa-check-circle"></i>
+          <h3>✅ Input Validation</h3>
+          <p>Validate arguments before function execution.</p>
+        </div>
+        <div class="use-case">
+          <i class="fas fa-retweet"></i>
+          <h3>🔄 Retry Logic</h3>
+          <p>Automatically retry failed operations (API calls, DB queries).</p>
+        </div>
+        <div class="use-case">
+          <i class="fas fa-code-branch"></i>
+          <h3>📝 DRY Principle</h3>
+          <p>Eliminate repetitive code across multiple functions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CODE EXAMPLE 1: Simple Timer Decorator -->
+  <div class="card">
+    <div class="card-header">
+      <i class="fas fa-stopwatch"></i>
+      <h2>⏱️ Example 1: Timing Decorator</h2>
+    </div>
+    <div class="card-body">
+      <div class="code-block">
+        <div class="code-title">
+          <i class="fab fa-python"></i> measure execution time
+        </div>
+        <pre><span class="keyword">import</span> time
+
+<span class="keyword">def</span> <span class="function">timer_decorator</span>(func):
+    <span class="keyword">def</span> <span class="function">wrapper</span>(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        <span class="function">print</span>(<span class="string">f"⏱️ {func.__name__} took {end - start:.4f} seconds"</span>)
+        <span class="keyword">return</span> result
+    <span class="keyword">return</span> wrapper
+
+<span class="decorator">@timer_decorator</span>
+<span class="keyword">def</span> <span class="function">slow_function</span>():
+    time.sleep(1)
+    <span class="keyword">return</span> <span class="string">"Done!"</span>
+
+<span class="function">print</span>(slow_function())</pre>
+        <div class="output-demo">
+          <i class="fas fa-terminal"></i> Output:
+          <pre>⏱️ slow_function took 1.0012 seconds
+Done!</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMPLE 2: Authentication / Login Required Decorator -->
+  <div class="card">
+    <div class="card-header">
+      <i class="fas fa-shield-alt"></i>
+      <h2>🔐 Example 2: Authentication Decorator</h2>
+    </div>
+    <div class="card-body">
+      <div class="code-block">
+        <div class="code-title">
+          <i class="fab fa-python"></i> login_required decorator
+        </div>
+        <pre><span class="keyword">def</span> <span class="function">login_required</span>(func):
+    <span class="keyword">def</span> <span class="function">wrapper</span>(user, *args, **kwargs):
+        <span class="keyword">if</span> <span class="keyword">not</span> user.get(<span class="string">'is_authenticated'</span>, <span class="keyword">False</span>):
+            <span class="keyword">return</span> <span class="string">"❌ Access Denied! Please login first."</span>
+        <span class="keyword">return</span> func(user, *args, **kwargs)
+    <span class="keyword">return</span> wrapper
+
+<span class="decorator">@login_required</span>
+<span class="keyword">def</span> <span class="function">dashboard</span>(user):
+    <span class="keyword">return</span> <span class="string">f"✅ Welcome {user['name']} to your dashboard!"</span>
+
+<span class="comment"># Testing</span>
+user1 = {<span class="string">'name'</span>: <span class="string">'Alice'</span>, <span class="string">'is_authenticated'</span>: <span class="keyword">True</span>}
+user2 = {<span class="string">'name'</span>: <span class="string">'Bob'</span>, <span class="string">'is_authenticated'</span>: <span class="keyword">False</span>}
+
+<span class="function">print</span>(dashboard(user1))
+<span class="function">print</span>(dashboard(user2))</pre>
+        <div class="output-demo">
+          <i class="fas fa-terminal"></i> Output:
+          <pre>✅ Welcome Alice to your dashboard!
+❌ Access Denied! Please login first.</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMPLE 3: Retry Decorator -->
+  <div class="card">
+    <div class="card-header">
+      <i class="fas fa-sync-alt"></i>
+      <h2>🔄 Example 3: Retry Decorator (Error Handling)</h2>
+    </div>
+    <div class="card-body">
+      <div class="code-block">
+        <div class="code-title">
+          <i class="fab fa-python"></i> retry on exception
+        </div>
+        <pre><span class="keyword">def</span> <span class="function">retry</span>(max_attempts=3):
+    <span class="keyword">def</span> <span class="function">decorator</span>(func):
+        <span class="keyword">def</span> <span class="function">wrapper</span>(*args, **kwargs):
+            <span class="keyword">for</span> attempt <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, max_attempts + <span class="number">1</span>):
+                <span class="keyword">try</span>:
+                    <span class="keyword">return</span> func(*args, **kwargs)
+                <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+                    <span class="function">print</span>(<span class="string">f"⚠️ Attempt {attempt} failed: {e}"</span>)
+                    <span class="keyword">if</span> attempt == max_attempts:
+                        <span class="keyword">raise</span>
+            <span class="keyword">return</span> <span class="keyword">None</span>
+        <span class="keyword">return</span> wrapper
+    <span class="keyword">return</span> decorator
+
+<span class="decorator">@retry(max_attempts=3)</span>
+<span class="keyword">def</span> <span class="function">unstable_api_call</span>():
+    <span class="keyword">import</span> random
+    <span class="keyword">if</span> random.random() < <span class="number">0.7</span>:
+        <span class="keyword">raise</span> Exception(<span class="string">"API temporarily unavailable"</span>)
+    <span class="keyword">return</span> <span class="string">"🎉 API Success!"</span>
+
+<span class="function">print</span>(unstable_api_call())</pre>
+        <div class="output-demo">
+          <i class="fas fa-terminal"></i> Output (example):
+          <pre>⚠️ Attempt 1 failed: API temporarily unavailable
+⚠️ Attempt 2 failed: API temporarily unavailable
+🎉 API Success!</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMPLE 4: Caching Decorator (Memoization) -->
+  <div class="card">
+    <div class="card-header">
+      <i class="fas fa-database"></i>
+      <h2>💾 Example 4: Caching / Memoization Decorator</h2>
+    </div>
+    <div class="card-body">
+      <div class="code-block">
+        <div class="code-title">
+          <i class="fab fa-python"></i> cache expensive computations
+        </div>
+        <pre><span class="keyword">def</span> <span class="function">cache</span>(func):
+    cache_storage = {}
+    <span class="keyword">def</span> <span class="function">wrapper</span>(*args):
+        <span class="keyword">if</span> args <span class="keyword">in</span> cache_storage:
+            <span class="function">print</span>(<span class="string">f"📦 Cache hit for {args}"</span>)
+            <span class="keyword">return</span> cache_storage[args]
+        <span class="function">print</span>(<span class="string">f"⚙️ Computing result for {args}"</span>)
+        result = func(*args)
+        cache_storage[args] = result
+        <span class="keyword">return</span> result
+    <span class="keyword">return</span> wrapper
+
+<span class="decorator">@cache</span>
+<span class="keyword">def</span> <span class="function">fibonacci</span>(n):
+    <span class="keyword">if</span> n < <span class="number">2</span>:
+        <span class="keyword">return</span> n
+    <span class="keyword">return</span> fibonacci(n-<span class="number">1</span>) + fibonacci(n-<span class="number">2</span>)
+
+<span class="function">print</span>(fibonacci(<span class="number">10</span>))
+<span class="function">print</span>(fibonacci(<span class="number">10</span>))  <span class="comment"># cached call</span></pre>
+        <div class="output-demo">
+          <i class="fas fa-terminal"></i> Output:
+          <pre>⚙️ Computing result for (10,)
+55
+📦 Cache hit for (10,)
+55</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DECORATOR WITH ARGUMENTS -->
+  <div class="card">
+    <div class="card-header">
+      <i class="fas fa-sliders-h"></i>
+      <h2>⚙️ Decorators with Arguments (Parameterized)</h2>
+    </div>
+    <div class="card-body">
+      <div class="code-block">
+        <div class="code-title">
+          <i class="fab fa-python"></i> parameterized decorator
+        </div>
+        <pre><span class="keyword">def</span> <span class="function">repeat</span>(times):
+    <span class="keyword">def</span> <span class="function">decorator</span>(func):
+        <span class="keyword">def</span> <span class="function">wrapper</span>(*args, **kwargs):
+            <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="function">range</span>(times):
+                result = func(*args, **kwargs)
+            <span class="keyword">return</span> result
+        <span class="keyword">return</span> wrapper
+    <span class="keyword">return</span> decorator
+
+<span class="decorator">@repeat(times=3)</span>
+<span class="keyword">def</span> <span class="function">greet</span>(name):
+    <span class="function">print</span>(<span class="string">f"Hello, {name}!"</span>)
+
+greet(<span class="string">"Pythonista"</span>)</pre>
+        <div class="output-demo">
+          <i class="fas fa-terminal"></i> Output:
+          <pre>Hello, Pythonista!
+Hello, Pythonista!
+Hello, Pythonista!</pre>
+        </div>
+      </div>
+      <div class="warning-box">
+        <i class="fas fa-exclamation-triangle"></i>
+        <div><strong>Important:</strong> Parameterized decorators have an extra layer — the outer function accepts arguments, then returns the actual decorator.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUILT-IN DECORATORS TABLE -->
+  <div class="card">
+    <div class="card-header">
+      <i class="fas fa-tools"></i>
+      <h2>🔧 Python Built-in Decorators</h2>
+    </div>
+    <div class="card-body">
+      <table class="decorator-table">
+        <thead>
+          <tr><th>Decorator</th><th>Purpose</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>@staticmethod</code></td><td>Defines a static method (no self/cls)</td><td>Utility functions inside a class</td></tr>
+          <tr><td><code>@classmethod</code></td><td>Defines a class method (receives cls)</td><td>Factory methods, class-level state</td></tr>
+          <tr><td><code>@property</code></td><td>Turns a method into a read-only attribute</td><td>Computed attributes, getters/setters</td></tr>
+          <tr><td><code>@functools.wraps</code></td><td>Preserves metadata of wrapped function</td><td>Essential for custom decorators</td></tr>
+          <tr><td><code>@lru_cache</code></td><td>Caches function results automatically</td><td>Memoization (functools.lru_cache)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PRESERVING METADATA -->
+  <div class="card">
+    <div class="card-header">
+      <i class="fas fa-id-card"></i>
+      <h2>🏷️ Preserving Function Metadata with <code>@wraps</code></h2>
+    </div>
+    <div class="card-body">
+      <div class="code-block">
+        <div class="code-title">
+          <i class="fab fa-python"></i> using functools.wraps
+        </div>
+        <pre><span class="keyword">from</span> functools <span class="keyword">import</span> wraps
+
+<span class="keyword">def</span> <span class="function">my_decorator</span>(func):
+    <span class="decorator">@wraps</span>(func)
+    <span class="keyword">def</span> <span class="function">wrapper</span>(*args, **kwargs):
+        <span class="string">"""Wrapper docstring"""</span>
+        <span class="function">print</span>(<span class="string">"Before"</span>)
+        <span class="keyword">return</span> func(*args, **kwargs)
+    <span class="keyword">return</span> wrapper
+
+<span class="decorator">@my_decorator</span>
+<span class="keyword">def</span> <span class="function">important_function</span>():
+    <span class="string">"""This is an important function"""</span>
+    <span class="keyword">pass</span>
+
+<span class="function">print</span>(important_function.__name__)
+<span class="function">print</span>(important_function.__doc__)</pre>
+        <div class="output-demo">
+          <i class="fas fa-terminal"></i> Output:
+          <pre>important_function
+This is an important function</pre>
+        </div>
+      </div>
+      <div class="info-box">
+        <i class="fas fa-heart"></i>
+        <div>Without <code>@wraps</code>, the function name and docstring would be replaced by the wrapper's — breaking introspection and debugging tools.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chaining Decorators -->
+  <div class="card">
+    <div class="card-header">
+      <i class="fas fa-link"></i>
+      <h2>⛓️ Chaining Multiple Decorators</h2>
+    </div>
+    <div class="card-body">
+      <div class="code-block">
+        <div class="code-title">
+          <i class="fab fa-python"></i> stacking decorators
+        </div>
+        <pre><span class="keyword">def</span> <span class="function">bold</span>(func):
+    <span class="keyword">def</span> <span class="function">wrapper</span>():
+        <span class="keyword">return</span> <span class="string">f"&lt;b&gt;{func()}&lt;/b&gt;"</span>
+    <span class="keyword">return</span> wrapper
+
+<span class="keyword">def</span> <span class="function">italic</span>(func):
+    <span class="keyword">def</span> <span class="function">wrapper</span>():
+        <span class="keyword">return</span> <span class="string">f"&lt;i&gt;{func()}&lt;/i&gt;"</span>
+    <span class="keyword">return</span> wrapper
+
+<span class="decorator">@bold</span>
+<span class="decorator">@italic</span>
+<span class="keyword">def</span> <span class="function">greet</span>():
+    <span class="keyword">return</span> <span class="string">"Hello"</span>
+
+<span class="function">print</span>(greet())  <span class="comment"># &lt;b&gt;&lt;i&gt;Hello&lt;/i&gt;&lt;/b&gt;</span></pre>
+        <div class="output-demo">
+          <i class="fas fa-terminal"></i> Output:
+          <pre>&lt;b&gt;&lt;i&gt;Hello&lt;/i&gt;&lt;/b&gt;</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary Footer -->
+  <div class="footer">
+    <i class="fas fa-graduation-cap"></i> Decorators = Higher-Order Functions + Closures<br>
+    They enable clean, reusable, and maintainable code by separating cross-cutting concerns.
+  </div>
+</div>
+</body>
+</html>

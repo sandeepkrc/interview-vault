@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐍 Functools & Higher-Order Functions | Python Magic Unveiled</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: #f0f0f0;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(2px);
+            border-radius: 32px;
+            padding: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-align: center;
+            background: linear-gradient(135deg, #f9d423, #ff4e50);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #a0a0ff;
+            margin-bottom: 40px;
+            font-size: 1.2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 5px solid #ff4e50;
+            color: #ffd966;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 25px 0 15px 0;
+            color: #6cffb0;
+        }
+
+        .card {
+            background: rgba(20, 20, 40, 0.7);
+            border-radius: 24px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px -15px rgba(0,0,0,0.5);
+            border-color: #ff4e50;
+        }
+
+        .code-block {
+            background: #0a0a1a;
+            border-radius: 16px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 4px solid #ff4e50;
+            font-family: 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        pre {
+            margin: 0;
+            color: #e0e0e0;
+        }
+
+        .output {
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 12px 20px;
+            margin-top: 10px;
+            color: #aaffdd;
+            border-left: 3px solid #6cffb0;
+            font-family: monospace;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #ff4e50;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #1e1e3a, #0f0f1f);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .info-box h4 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            color: #888;
+        }
+
+        .highlight {
+            color: #ffb347;
+            font-weight: bold;
+        }
+
+        .note {
+            background: rgba(255, 200, 100, 0.1);
+            padding: 12px 20px;
+            border-radius: 16px;
+            border-left: 4px solid #ffb347;
+            margin: 20px 0;
+        }
+
+        button {
+            background: #ff4e50;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: monospace;
+        }
+
+        button:hover {
+            background: #ff6b6b;
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .code-block {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐍 Functools & Higher-Order Functions</h1>
+        <div class="subtitle">✨ Write Cleaner, Smarter, More Pythonic Code ✨</div>
+
+        <!-- INTRO SECTION -->
+        <div class="card">
+            <h2>📖 What Are Higher-Order Functions?</h2>
+            <p><span class="badge">✨ Concept</span> A function that does at least ONE of these:</p>
+            <ul style="margin-left: 30px; margin-top: 15px;">
+                <li>✅ Takes another function as an argument</li>
+                <li>✅ Returns a function as its result</li>
+            </ul>
+            <div class="note">
+                💡 <strong>Think of it like:</strong> A higher-order function is a "function factory" or a "function manager". 
+                It can wrap, modify, or combine other functions!
+            </div>
+        </div>
+
+        <!-- HIGHER ORDER FUNCTIONS - map, filter, reduce -->
+        <h2>🔧 Built-in Higher-Order Functions</h2>
+
+        <div class="grid">
+            <div class="info-box">
+                <h4>📦 map()</h4>
+                <p>Apply a function to EVERY item in a list</p>
+            </div>
+            <div class="info-box">
+                <h4>🔍 filter()</h4>
+                <p>Keep ONLY items that pass a test</p>
+            </div>
+            <div class="info-box">
+                <h4>➕ reduce()</h4>
+                <p>Combine items into a single value</p>
+            </div>
+        </div>
+
+        <!-- MAP EXAMPLE -->
+        <div class="card">
+            <h3>🔹 map() - Transform Data in Bulk</h3>
+            <div class="code-block">
+                <pre>
+# Double every number in a list
+numbers = [1, 2, 3, 4, 5]
+
+def double(x):
+    return x * 2
+
+doubled = list(map(double, numbers))
+print(doubled)
+
+# ✨ Using lambda (one-liner magic!)
+doubled_lambda = list(map(lambda x: x * 2, numbers))
+print(doubled_lambda)
+                </pre>
+            </div>
+            <div class="output">
+                📤 Output: [2, 4, 6, 8, 10]<br>
+                📤 Output: [2, 4, 6, 8, 10]
+            </div>
+        </div>
+
+        <!-- FILTER EXAMPLE -->
+        <div class="card">
+            <h3>🔹 filter() - Keep What Matters</h3>
+            <div class="code-block">
+                <pre>
+# Keep only even numbers
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+def is_even(n):
+    return n % 2 == 0
+
+evens = list(filter(is_even, numbers))
+print(evens)
+
+# ✨ Lambda version
+evens_lambda = list(filter(lambda x: x % 2 == 0, numbers))
+print(evens_lambda)
+                </pre>
+            </div>
+            <div class="output">
+                📤 Output: [2, 4, 6, 8, 10]
+            </div>
+        </div>
+
+        <!-- REDUCE EXAMPLE -->
+        <div class="card">
+            <h3>🔹 reduce() - Fold Everything Together</h3>
+            <div class="code-block">
+                <pre>
+from functools import reduce
+
+# Sum all numbers in a list
+numbers = [1, 2, 3, 4, 5]
+
+total = reduce(lambda a, b: a + b, numbers)
+print(f"Sum: {total}")
+
+# Find the maximum number
+max_num = reduce(lambda a, b: a if a > b else b, numbers)
+print(f"Max: {max_num}")
+
+# Multiply all numbers
+product = reduce(lambda a, b: a * b, numbers)
+print(f"Product: {product}")
+                </pre>
+            </div>
+            <div class="output">
+                📤 Sum: 15<br>
+                📤 Max: 5<br>
+                📤 Product: 120
+            </div>
+        </div>
+
+        <!-- FUNCTOOLS SECTION -->
+        <h2>🎁 Python's Functools Module - Function Superpowers</h2>
+
+        <!-- LRU CACHE -->
+        <div class="card">
+            <h3>⚡ @lru_cache - Memoization Made Easy</h3>
+            <p>Cache function results automatically — perfect for expensive/recursive functions!</p>
+            <div class="code-block">
+                <pre>
+from functools import lru_cache
+
+@lru_cache(maxsize=128)
+def fibonacci(n):
+    """Calculate Fibonacci with caching (super fast!)"""
+    if n < 2:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+# First call - calculates
+print(f"fib(35) = {fibonacci(35)}")
+
+# Second call - instant from cache! 🚀
+print(f"fib(35) again = {fibonacci(35)}")
+
+print(f"Cache info: {fibonacci.cache_info()}")
+                </pre>
+            </div>
+            <div class="output">
+                📤 fib(35) = 9227465<br>
+                📤 fib(35) again = 9227465 (retrieved from cache!)<br>
+                📤 Cache info: CacheInfo(hits=1, misses=36, maxsize=128, currsize=36)
+            </div>
+            <div class="note">
+                💡 <strong>Use When:</strong> Recursive functions, expensive API calls, database queries that repeat!
+            </div>
+        </div>
+
+        <!-- PARTIAL -->
+        <div class="card">
+            <h3>🎯 partial() - Freeze Function Arguments</h3>
+            <p>Create a new function with some arguments pre-filled (like a function preset!)</p>
+            <div class="code-block">
+                <pre>
+from functools import partial
+
+def power(base, exponent):
+    return base ** exponent
+
+# Create specialized functions
+square = partial(power, exponent=2)
+cube = partial(power, exponent=3)
+
+print(f"Square of 5: {square(5)}")
+print(f"Cube of 5: {cube(5)}")
+
+# Real-world: fix API endpoint
+def send_request(url, method, data=None):
+    return f"Sending {method} to {url} with {data}"
+
+post_to_api = partial(send_request, method="POST", url="https://api.example.com")
+print(post_to_api(data='{"name": "John"}'))
+                </pre>
+            </div>
+            <div class="output">
+                📤 Square of 5: 25<br>
+                📤 Cube of 5: 125<br>
+                📤 Sending POST to https://api.example.com with {"name": "John"}
+            </div>
+        </div>
+
+        <!-- WRAPS -->
+        <div class="card">
+            <h3>📝 @wraps - Preserve Your Function's Identity</h3>
+            <p>When you write decorators, @wraps keeps the original function's name, docstring, and metadata!</p>
+            <div class="code-block">
+                <pre>
+from functools import wraps
+
+def my_decorator(func):
+    @wraps(func)  # ← WITHOUT this, function metadata is lost!
+    def wrapper(*args, **kwargs):
+        """Wrapper docstring"""
+        print("Before function call")
+        result = func(*args, **kwargs)
+        print("After function call")
+        return result
+    return wrapper
+
+@my_decorator
+def greet(name):
+    """Greets a person with a friendly message"""
+    print(f"Hello, {name}!")
+
+greet("Alice")
+print(f"\nFunction name: {greet.__name__}")      # ← Without @wraps, this would be 'wrapper'
+print(f"Docstring: {greet.__doc__}")             # ← Original docstring preserved!
+                </pre>
+            </div>
+            <div class="output">
+                📤 Before function call<br>
+                📤 Hello, Alice!<br>
+                📤 After function call<br>
+                📤 <br>
+                📤 Function name: greet<br>
+                📤 Docstring: Greets a person with a friendly message
+            </div>
+        </div>
+
+        <!-- TOTAL_ORDERING -->
+        <div class="card">
+            <h3>🏷️ @total_ordering - Less Code, More Comparison</h3>
+            <p>Define only __eq__ and one other comparison, Python fills the rest!</p>
+            <div class="code-block">
+                <pre>
+from functools import total_ordering
+
+@total_ordering
+class Student:
+    def __init__(self, name, grade):
+        self.name = name
+        self.grade = grade
+    
+    def __eq__(self, other):
+        return self.grade == other.grade
+    
+    def __lt__(self, other):
+        return self.grade < other.grade
+    
+    def __repr__(self):
+        return f"{self.name}: {self.grade}"
+
+alice = Student("Alice", 85)
+bob = Student("Bob", 75)
+charlie = Student("Charlie", 85)
+
+print(f"Alice > Bob: {alice > bob}")      # Works even though we only defined __lt__!
+print(f"Alice >= Charlie: {alice >= charlie}")
+print(f"Bob <= Charlie: {bob <= charlie}")
+print(f"Sorted students: {sorted([alice, bob, charlie])}")
+                </pre>
+            </div>
+            <div class="output">
+                📤 Alice > Bob: True<br>
+                📤 Alice >= Charlie: True<br>
+                📤 Bob <= Charlie: True<br>
+                📤 Sorted students: [Bob: 75, Alice: 85, Charlie: 85]
+            </div>
+        </div>
+
+        <!-- REAL WORLD EXAMPLE -->
+        <h2>🚀 Real-World Functools Example</h2>
+        <div class="card">
+            <h3>🌐 API Caller with Caching & Partial</h3>
+            <div class="code-block">
+                <pre>
+from functools import lru_cache, partial
+import time
+
+@lru_cache(maxsize=10)
+def fetch_user(user_id):
+    """Simulate an expensive API call"""
+    print(f"🌐 API CALLING for user {user_id}...")
+    time.sleep(1)  # Simulate network delay
+    return {
+        "id": user_id,
+        "name": f"User_{user_id}",
+        "email": f"user{user_id}@example.com"
+    }
+
+# Create specialized fetchers
+fetch_admin = partial(fetch_user, user_id=1)
+
+# First call - hits the API
+print(fetch_admin())
+
+# Second call - from cache! (instant)
+print(fetch_admin())
+
+print(f"\nCache stats: {fetch_user.cache_info()}")
+                </pre>
+            </div>
+            <div class="output">
+                📤 🌐 API CALLING for user 1...<br>
+                📤 {'id': 1, 'name': 'User_1', 'email': 'user1@example.com'}<br>
+                📤 {'id': 1, 'name': 'User_1', 'email': 'user1@example.com'} (from cache)<br>
+                📤 Cache stats: CacheInfo(hits=1, misses=1, maxsize=10, currsize=1)
+            </div>
+        </div>
+
+        <!-- QUICK COMPARISON TABLE -->
+        <h2>📊 Quick Reference</h2>
+        <div class="card">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <tr style="background: #ff4e50; color: white;">
+                    <th style="padding: 12px; border-radius: 12px 0 0 0;">Function/Tool</th>
+                    <th style="padding: 12px;">What It Does</th>
+                    <th style="padding: 12px; border-radius: 0 12px 0 0;">Use Case</th>
+                </tr>
+                <tr style="border-bottom: 1px solid #333;">
+                    <td style="padding: 12px;"><span class="highlight">map()</span></td>
+                    <td style="padding: 12px;">Apply function to each item</td>
+                    <td style="padding: 12px;">Transform lists</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #333;">
+                    <td style="padding: 12px;"><span class="highlight">filter()</span></td>
+                    <td style="padding: 12px;">Keep items passing a test</td>
+                    <td style="padding: 12px;">Filter data</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #333;">
+                    <td style="padding: 12px;"><span class="highlight">reduce()</span></td>
+                    <td style="padding: 12px;">Combine items into one</td>
+                    <td style="padding: 12px;">Sum, product, aggregation</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #333;">
+                    <td style="padding: 12px;"><span class="highlight">@lru_cache</span></td>
+                    <td style="padding: 12px;">Cache function results</td>
+                    <td style="padding: 12px;">Performance optimization</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #333;">
+                    <td style="padding: 12px;"><span class="highlight">partial()</span></td>
+                    <td style="padding: 12px;">Pre-fill function arguments</td>
+                    <td style="padding: 12px;">Create specialized functions</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;"><span class="highlight">@wraps</span></td>
+                    <td style="padding: 12px;">Preserve metadata in decorators</td>
+                    <td style="padding: 12px;">Clean decorators</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- TIPS SECTION -->
+        <div class="note">
+            💡 <strong>Pro Tips:</strong>
+            <ul style="margin-top: 10px; margin-left: 20px;">
+                <li>⭐ Use <code>lambda</code> for simple one-liners, but named functions for complex logic</li>
+                <li>⭐ <code>@lru_cache</code> is a GAME CHANGER for recursive functions (like Fibonacci!)</li>
+                <li>⭐ <code>partial()</code> is perfect for callback functions and reducing repetitive arguments</li>
+                <li>⭐ Always use <code>@wraps</code> when writing custom decorators - debugging will thank you!</li>
+            </ul>
+        </div>
+
+        <!-- FUN CHALLENGE -->
+        <div class="card" style="background: linear-gradient(135deg, #2a1a3a, #1a1a2e);">
+            <h3>🎯 Mini Challenge - Test Yourself!</h3>
+            <div class="code-block">
+                <pre>
+# Can you guess the output? 🤔
+
+from functools import reduce
+
+numbers = [2, 4, 6, 8]
+
+result = reduce(lambda x, y: x * y, filter(lambda n: n > 4, numbers))
+print(result)
+
+# Hint: filter first, then multiply!
+                </pre>
+            </div>
+            <button onclick="revealAnswer()">✨ Reveal Answer ✨</button>
+            <div id="answer" style="display: none; margin-top: 15px;" class="output">
+                🔓 Answer: 48<br>
+                Explanation: filter() keeps [6, 8] (numbers > 4), then reduce multiplies: 6 × 8 = 48
+            </div>
+        </div>
+
+        <footer>
+            🐍 Python Functools & Higher-Order Functions | Write Smarter, Not Harder! 🚀<br>
+            <span style="font-size: 0.8rem;">💡 "Functions that operate on functions = Pure magic" ✨</span>
+        </footer>
+    </div>
+
+    <script>
+        function revealAnswer() {
+            const answerDiv = document.getElementById('answer');
+            if (answerDiv.style.display === 'none' || answerDiv.style.display === '') {
+                answerDiv.style.display = 'block';
+            } else {
+                answerDiv.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
