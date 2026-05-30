@@ -1,0 +1,63 @@
+@import url("base.css");
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 2rem;
+    min-height: 100vh;
+}
+
+.non-static-container {
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.header {
+    color: white;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.header p {
+    font-size: 1.1rem;
+    opacity: 0.95;
+}
+
+.methods-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.method-card {
+    background: white;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    flex: 1;
+    min-width: 300px;
+    max-width: 380px;
+}
+
+.card-header {
+    color: white;
+}
+
+.card-header i {
+    font-size: 2rem;
+}
+
+.card-header h2 {
+    font-size: 1.5rem;
+}
+
+.instance-header { background: linear-gradient(135deg, #667eea, #764ba2); }
+.class-header { background: linear-gradient(135deg, #f093fb, #f5576c); }
+.property-header { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+
+.code-block .keyword { color: #569cd6; }
+.code-block .function { color: #dcdcaa; }
+.code-block .string { color: #ce9178; }
+.code-block .comment { color: #6a9955; }
